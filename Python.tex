@@ -1,0 +1,203 @@
+\documentclass{article}
+
+\title{Python}
+
+\usepackage{listingsutf8}
+\lstset{language=Python}
+\lstset{
+  literate = 
+  {ã}{{\~a}}1
+  {ç}{{\c c}}1
+  {á}{{\'a}}1
+  }
+
+\setlength{\topmargin}{-0.4in}
+ \setlength{\topskip}{0.3in}        % between header and text
+ \setlength{\textheight}{9.5in}     % height of main text
+ \setlength{\textwidth}{6in}        % width of text
+ \setlength{\oddsidemargin}{0.1in}  % odd page left margin
+ \setlength{\evensidemargin}{0.1in} % even page left margin
+
+
+\begin{document}
+  \maketitle
+  \section{Conceitos Básicos}
+  
+  \begin{itemize}
+  \item Defini\c c\~ao de variaveis:
+  
+  \begin{lstlisting}
+  <nome_variavel> = <valor>
+  \end{lstlisting}
+  
+  Exemplos:
+  
+  \begin{lstlisting}
+  string = "Olá!"
+  inteiro = 4
+  decimal = 3.14
+  \end{lstlisting}
+  
+  \item Arrays
+  
+  Os arrays s\~ao criados com parentesis retos [], estando os elementos do mesmo dentro destes separados por v\'irgulas.
+  
+  \begin{lstlisting}
+  <nome_array> = [elem1, elem2, ..., elemN]
+  \end{lstlisting}
+  
+  Exemplo:
+  
+  \begin{lstlisting}
+  array = [1, 2, 3, "a dog"]
+  \end{lstlisting}
+  
+  \begin{itemize}
+  \item Adicionar elementos
+  
+  Para adicionar elementos a um array utiliza-se o m\'etodo append, seguido do elemento que se pretende adicionar.
+  
+  Exemplo:
+  
+  \begin{lstlisting}
+  array.append(5)
+  print(array)
+    [1, 2, 3, "a dog", 5]
+  \end{lstlisting}
+  
+  \item Selecionar elementos de um array
+  
+  Para se selecionar elementos de um array, utiliza-se o \'indice do elemento que pretendemos selecionar dentro de parentesis retos, a seguir ao nome do array.
+  
+  Exemplo:
+  
+  \begin{lstlisting}
+  #Selecionar a string "a dog" do array, sendo o seu indice 3
+  print(array[3])
+  	a dog
+  	
+  #selecionar o numero 3 do array, sendo o seu indice 2, e atribuir o mesmo à variavel num
+  num = array[2]
+  print(num)
+  	3
+  \end{lstlisting}
+  
+  \item Eliminar elementos de um array
+  
+  Para eliminar elementos de um array é utilizada a fun\c c\~ao del sendo dado como o seu parametro o nome do array seguido do indice do elemento que se pretende eliminar entre parentesis retos [].
+  
+  Exemplo:
+  
+  \begin{lstlisting}
+  #queremos apenas que o array contenha numeros, pelo que se irá eliminar 
+  #a string "a dog" contido no indice 3
+  del(array[3])
+  print(array)
+  	[1, 2, 3, 5]
+  \end{lstlisting}
+  
+  \item Adicionar elementos num indice especifico
+  
+  Para se adicionar elementos ao array, num indice especifico \'e utilizado o m\'etodo insert aplicado ao array seguido do indice onde se pretende adicionar e o elemento que se aprende adicionar no mesmo.
+  
+  \begin{lstlisting}
+  <nome_array>.insert(<indice>, <elemento>)
+  \end{lstlisting}
+  
+  Exemplo:
+  
+  \begin{lstlisting}
+  #inserir novamente a string "a dog" no array no indice 3, 
+  #onde estava anteriormente
+  array.insert(3, "a dog")
+  print(array)
+  	[1, 2, 3, "a dog", 5]
+  \end{lstlisting}
+  
+  \item Selecionar um subconjunto do array
+  
+  \begin{lstlisting}
+  <nome_array>[indice_inicial:indice_final]
+  \end{lstlisting}
+  
+  Exemplo:
+  
+  \begin{lstlisting}
+  array[2:4]
+  	[3, "a dog"]
+  \end{lstlisting}
+  
+  \end{itemize}  
+  
+  \item Ciclo for
+  \begin{lstlisting}
+  for <condição>:
+	<desenvolvimento do que fará quando se verifica a condição>
+  \end{lstlisting}  
+  
+  Exemplo:
+  \begin{lstlisting}
+  for x in range (0,3): 
+  	print "We're on time" + x 	
+  \end{lstlisting}
+  Quando x pertence ao intervalo [0;3[ (range(a,b) cria o intervalo/sequencia [a.b[) escreve/imprime a frase We're on time x, substituindo x pelo respetivo valor
+  
+  \item Ciclo while  
+  \begin{lstlisting}
+  for <condição>:
+	<desenvolvimento do que fará quando se verifica a condição>
+  \end{lstlisting} 
+  
+  Exemplo:
+  \begin{lstlisting}
+  x = 1  
+  while x<3: 
+  	print "We're on time" + x
+  	x += 1
+  \end{lstlisting}
+  Enquanto x for inferior a 3, imprime We're on time x, substituindo x pelo respetivo valor, incrementando de seguida 1 ao mesmo
+  
+  \item Condicionais if/else
+  \begin{lstlisting}
+  if <condição>:
+  	<o que faz se condição verdade>
+  else:
+  	<o que faz se condição falsa>
+  \end{lstlisting}
+  
+  Exemplo:
+  
+  \begin{lstlisting}
+  num = 3
+  if num >= 0:
+  	print("Positivo ou zero")
+  else:
+  	print("Negativo")
+  \end{lstlisting}
+  Se a variavel num for maior ou igual que zero imprime a frase "Positivo ou zero", caso contr\'ario imprime a frase "Negativo"
+  
+  \item Defini\c c\~ao de fun\c c\~oes:
+  
+  \begin{lstlisting}
+  def <nome> (<args>):
+  	<corpo da função
+  	termina com return>
+  \end{lstlisting}
+  
+  Exemplo:
+  \begin{lstlisting}
+  def soma (a, b):
+	return a + b
+  \end{lstlisting}  
+  
+\end{itemize}
+
+\section{Numpy}
+
+\section{Pandas}
+
+\section{Matplotlib}
+
+\section{scikit-learn}
+    
+\end{document}
