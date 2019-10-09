@@ -208,8 +208,90 @@ URL Tutorial:
 
 \url{https://numpy.org/devdocs/user/quickstart.html}
 
-Adicionar tutorial
+Para utilizar a biblioteca numpy começa-se por utilizar o comando
 
+\begin{lstlisting}
+#importação da biblioteca numpy passando a ser denominado por np daqui para a frente
+import numpy as np
+\end{lstlisting}
+
+Podem criar-se matrizes de zeros ou com os elementos que pretendemos. Para se criar uma matriz de zeros com n linhas e m colunas \'e utilizado o comando 
+
+\begin{lstlisting}
+x = np.zeros((n, m))
+\end{lstlisting}
+
+Para se criar uma matriz com os elementos pretendidos, \'e utilizada a fun\c c\~ao array da biblioteca numpy, sendo dados como argumentos as linhas da matriz.
+
+Exemplos:
+
+\begin{lstlisting}
+#array de zeros com 2 linhas e 3 colunas
+x = np.zeros((2, 3))
+print(x)
+	[[0. 0. 0.]
+	 [0. 0. 0.]]
+
+y = np.array([[1, 2], [0,3.2], [1, 7]])
+print(y)
+	[[1. 2. ]
+	 [0. 3.2]
+	 [1. 7. ]]
+	 
+\end{lstlisting}
+
+Para se saber as dimens\~oes da matriz aplica-se o m\'etodo shape \`a matriz em quest\~ao.
+
+\begin{lstlisting}
+#a matriz x é composta por 2 linha e 3 colunas
+x.shape
+	(2,3)
+
+#a matrix y é composta por 3 linhas e 2 colunas	
+y.shape
+	(3,2)
+\end{lstlisting}
+
+Se pretendermos saber o numero total de elementos existentes na matriz aplica-se o m\'etodo size \`a mesma
+
+\begin{lstlisting}
+x.size
+	6
+
+y.size
+	6
+\end{lstlisting}
+
+Para al\'em de matrizes tamb\'em \'e poss\'ivel a cria\c c\~ao de arrays, uma vez que estes s\~ao considerados matrizes com apenas uma linha, como \'e poss\'ivel verificar no seguinte exemplo
+
+\begin{lstlisting}
+a = np.array([2, 3, 4])
+print(a)
+	[2 3 4]
+\end{lstlisting}
+
+Sendo assim poss\'ivel a construção com n\'umeros num determinado intervalo, para tal \'e utilizada a fun\c c\~ao arange que recebe como argumentos o valor inicial do intervalo, o valor final e o passo utilizado entre cada elemento.
+
+Exemplo:
+
+\begin{lstlisting}
+#array cujos elementos começam no valor 10 e terminam no 25, uma vez que o 30 já 
+#não irá entrar no intervalo, variando de 5 em 5
+b = np.arrange(10, 30, 5)
+print(b)
+	[10 15 20 25]
+\end{lstlisting}
+
+Também é possivel dizer apenas os valores iniciais e finais que pretendemos e o n\'umero de elementos que ir\~ao constituir o array, usando para tal a fun\c c\~ao linspace.
+
+Exemplo:
+
+\begin{lstlisting}
+#array cujos elemtnos começam no valor 0 e terminam no 2, sendo o mesmo composto por 9 elementos
+c = np.linspace(0, 2, 9)
+print(c)
+	[0. 0.25 0.5 0.75 1. 1.25 1.5 1.75 2.]
+\end{lstlisting}
 \section{Pandas}
 URL Getting Started:
 

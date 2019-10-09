@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.6.26)  6 OCT 2019 22:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.6.26)  9 OCT 2019 23:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -289,30 +289,62 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 209.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 209.
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
 
-Overfull \hbox (18.1866pt too wide) in paragraph at lines 219--220
+Overfull \hbox (70.38513pt too wide) in paragraph at lines 214--215
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+Missing character: There is no Ã in font cmti10!
+Missing character: There is no © in font cmti10!
+[3]
+Missing character: There is no Ã in font cmti10!
+Missing character: There is no © in font cmti10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+
+Overfull \hbox (46.38489pt too wide) in paragraph at lines 278--279
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+] 
+ []
+
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+
+Overfull \hbox (142.38586pt too wide) in paragraph at lines 290--291
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+][] 
+ []
+
+
+Overfull \hbox (18.1866pt too wide) in paragraph at lines 303--304
 [][][]$\OT1/cmr/m/n/10 https : / / matplotlib . org / tutorials / introductory 
 / usage . html # sphx-[]glr-[]tutorials-[]introductory-[]usage-[]py$[][] 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 226.
-[3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 226.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 310.
+[4]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 310.
  (./Python.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 226.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 226.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 310.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 310.
 Package rerunfilecheck Info: File `Python.out' has not changed.
 (rerunfilecheck)             Checksum: 41116ABE34CDEE2EF6FBB276AB5E0E96;228.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 226.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 310.
  ) 
 Here is how much of TeX's memory you used:
- 6454 strings out of 494880
- 95289 string characters out of 6179601
+ 6515 strings out of 494880
+ 96097 string characters out of 6179601
  211927 words of memory out of 5000000
- 9671 multiletter control sequences out of 15000+600000
+ 9685 multiletter control sequences out of 15000+600000
  7934 words of font info for 28 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 32i,6n,40p,226b,1771s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 32i,6n,40p,257b,1771s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
@@ -321,10 +353,10 @@ mf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
 public/amsfonts/cm/cmti10.pfb>
-Output written on Python.pdf (3 pages, 101007 bytes).
+Output written on Python.pdf (4 pages, 108366 bytes).
 PDF statistics:
- 170 PDF objects out of 1000 (max. 8388607)
- 155 compressed objects within 2 object streams
- 83 named destinations out of 1000 (max. 500000)
+ 230 PDF objects out of 1000 (max. 8388607)
+ 213 compressed objects within 3 object streams
+ 130 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
