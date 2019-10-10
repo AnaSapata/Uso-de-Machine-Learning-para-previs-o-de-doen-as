@@ -19,6 +19,7 @@
   {ã}{{\~a}}1
   {ç}{{\c c}}1
   {á}{{\'a}}1
+  {à}{{\`a}}1
   }
 
 \setlength{\topmargin}{-0.4in}
@@ -86,7 +87,8 @@
   print(array[3])
   	a dog
   	
-  #selecionar o numero 3 do array, sendo o seu indice 2, e atribuir o mesmo à variavel num
+  #selecionar o numero 3 do array, sendo o seu indice 2, e atribuir 
+  #o mesmo à variavel num
   num = array[2]
   print(num)
   	3
@@ -94,7 +96,7 @@
   
   \item Eliminar elementos de um array
   
-  Para eliminar elementos de um array é utilizada a fun\c c\~ao del sendo dado como o seu parametro o nome do array seguido do indice do elemento que se pretende eliminar entre parentesis retos [].
+  Para eliminar elementos de um array \'e utilizada a fun\c c\~ao del sendo dado como o seu parametro o nome do array seguido do indice do elemento que se pretende eliminar entre parentesis retos [].
   
   Exemplo:
   
@@ -108,7 +110,7 @@
   
   \item Adicionar elementos num indice especifico
   
-  Para se adicionar elementos ao array, num indice especifico \'e utilizado o m\'etodo insert aplicado ao array seguido do indice onde se pretende adicionar e o elemento que se aprende adicionar no mesmo.
+  Para se adicionar elementos ao array, num indice especifico \'e utilizado o m\'etodo insert aplicado ao array seguido do indice onde se pretende adicionar e o elemento que se pretende adicionar no mesmo.
   
   \begin{lstlisting}
   <nome_array>.insert(<indice>, <elemento>)
@@ -252,7 +254,7 @@ y.shape
 	(3,2)
 \end{lstlisting}
 
-Se pretendermos saber o numero total de elementos existentes na matriz aplica-se o m\'etodo size \`a mesma
+Se pretendermos saber o n\'umero total de elementos existentes na matriz aplica-se o m\'etodo size \`a mesma
 
 \begin{lstlisting}
 x.size
@@ -277,17 +279,18 @@ Exemplo:
 \begin{lstlisting}
 #array cujos elementos começam no valor 10 e terminam no 25, uma vez que o 30 já 
 #não irá entrar no intervalo, variando de 5 em 5
-b = np.arrange(10, 30, 5)
+b = np.arange(10, 30, 5)
 print(b)
 	[10 15 20 25]
 \end{lstlisting}
 
-Também é possivel dizer apenas os valores iniciais e finais que pretendemos e o n\'umero de elementos que ir\~ao constituir o array, usando para tal a fun\c c\~ao linspace.
+Tamb\'em \'e possivel dizer apenas os valores iniciais e finais que pretendemos e o n\'umero de elementos que ir\~ao constituir o array, usando para tal a fun\c c\~ao linspace.
 
 Exemplo:
 
 \begin{lstlisting}
-#array cujos elemtnos começam no valor 0 e terminam no 2, sendo o mesmo composto por 9 elementos
+#array cujos elmentos começam no valor 0 e terminam no 2, sendo o mesmo composto 
+#por 9 elementos
 c = np.linspace(0, 2, 9)
 print(c)
 	[0. 0.25 0.5 0.75 1. 1.25 1.5 1.75 2.]
