@@ -1,6 +1,14 @@
 \documentclass{article}
 
-\title{Python}
+\title{%
+		Uso de Machine Learning para previs\~ao de doen\c cas \\
+		\large Projeto Integrado - Engenharia Inform\'atica - U\'Evora
+		}
+
+\author{Ana Sapata, 42255 \\
+		Jos\'e Azevedo, 45414 \\
+		Raquel Lopes, 42075}
+
 
 \usepackage{hyperref}
 \hypersetup{
@@ -32,7 +40,16 @@
 
 \begin{document}
   \maketitle
-  \section{Conceitos B\'asicos}
+  \pagebreak
+  \section{Introdu\c c\~ao}
+  
+\qquad \quad Este trabalho \'e realizado no \^ambito da disciplina de Projeto Integrado, da licenciatura de Engenharia Inform\'atica da Universidade de \'Evora.
+
+\quad Como objetivos do mesmo pretende-se aprender a utilizar bibliotecas especificas do Pyhton como o Numpy, Matplotlib e Scikit-Learning, utilizadas em projetos relacionados com Machine Learning. Sendo assim, o trabalho consiste na realização de um projeto na \'area de Machine Learning, mais concretamente na implementa\c c\~ao do artigo “Building meaningful machine learning models for disease prediction” (\url{https://shiring.github.io/machine_learning/2017/03/31/webinar_code}) em Pyhton, atraves das bibliotecas anteriormente referidas.
+
+\quad Primeiramente ir\~ao ser apresentados conceitos b\'asicos de Pyhton, bem como das bibliotecas a utilizar, passando de seguida \`a implemanta\c c\~ao do projeto.
+  \section{Python}
+  \subsection{Conceitos B\'asicos}
   
   \begin{itemize}
   \item Defini\c c\~ao de variaveis:
@@ -204,7 +221,7 @@
   
 \end{itemize}
 
-\section{Numpy}
+\subsection{Numpy}
 
 URL Tutorial:
 
@@ -295,7 +312,9 @@ c = np.linspace(0, 2, 9)
 print(c)
 	[0. 0.25 0.5 0.75 1. 1.25 1.5 1.75 2.]
 \end{lstlisting}
-\section{Pandas}
+
+
+\subsection{Pandas}
 URL Getting Started:
 
 \url{https://pandas.pydata.org/pandas-docs/stable/getting_started/index.html}
@@ -303,14 +322,96 @@ URL Getting Started:
 Tutorial Pandas, implementar
 
 
-\section{Matplotlib}
+\subsection{Matplotlib}
 URL Tutorial:
 
 \url{https://matplotlib.org/tutorials/introductory/usage.html#sphx-glr-tutorials-introductory-usage-py}
 
-\section{scikit-learn}
+\subsection{scikit-learn}
 URL Tutorial:
 
 \url{https://scikit-learn.org/stable/tutorial/index.html}
     
+\section{Uso de Machine Learning para previs\~ao de doen\c cas}
+
+\quad Os dados utilizados no projeto podem ser obtidos a partir do reposit\'orio de Machine Learning da UCI (\url{http://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+\%28Diagnostic\%29}), estando os mesmos relacionados com o diagnostico de cancro.
+
+\subsection{Tratamento e an\'alise dos dados}
+
+\quad Inicialmente começou por se fazer o download dos dados, e transformar os mesmo no formato de data frame, de modo a facilitar a sua posterior an\'alise.
+
+Para os dados serem carregados no python e ao mesmo tempo transformados numa data frame, foi utilizado o comando \textit{read\_csv} e guardado o resultado na variavel \textit{df}.
+
+\begin{lstlisting}
+#importação da biblioteca pandas, quando for necessário usar a mesma irá ser utilizado 
+#pd em vez de pandas
+import pandas as pd
+
+# Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas 
+#(header = None)
+
+# Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que
+# temos o ficheiro em formato csv
+df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning
+-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+                 header = None)
+
+# Mostra as primeiras 5 linhas do ficheiro/data frame
+print(df.head())
+\end{lstlisting}
+
+Ap\'os guardados os dados na variavel \textit{df}, uma vez que as colunas da data frame n\~ao tinha qualquer nome associado foi necess\'ario atribuir os respetivos nomes a estas.
+
+\begin{lstlisting}
+# Uma vez que o ficheiro não tem nome para as colunas, tal como acontece 
+# posteriormente com a data frame é então necessário atribuir os respetivos
+# nomes às mesmas para tal
+df.columns = ['sample_code_number',
+              'clump_thickness',
+              'uniformity_of_cell_size',
+              'uniformity_of_cell_shape',
+              'marginal_adhesion',
+              'single_epithelial_cell_size',
+              'bare_nuclei',
+              'bland_chromatin',
+              'normal_nucleoli',
+              'mitosis',
+              'classes']
+
+# Mostrar novamente as primeira 5 linhas de modo a confirmar que os nomes das 
+# colunas lhes foram atribuidos
+print(df.head())
+\end{lstlisting}
+
+De seguida foi tratada a coluna \textit{classes} de modo a ter o valor "benign" quando esta era 2, "malignant" quando era 4 e NA nos restantes casos.
+
+\begin{lstlisting}
+# Quando classes tem o valor 2 deverá torna-se "benign", quando tem o valor 4 
+# deverá tornar-se "malignant" e nos restantes casos NA
+df.classes.replace([2, 4], ['benign', 'malignant'], inplace = True)
+
+# Verificar que alterou os valores
+print(df.head())
+print(df.tail())
+\end{lstlisting}
+
+Uma vez organizada a coluna \textit{classes}, pretende-se agora verificar a exist\^encia de valores NA. Sabe-se que existem celulas cujo seu valor \'e '?' pelo que primeiramente estes valores ter\~ao de passar a NA. O equivalente ao NA na biblioteca numpy \'e o NaN, tendo ent\~ao utilizado este valor quando as c\'elulas tinham o valor '?'.
+
+\begin{lstlisting}
+import numpy as np
+
+# Quando existe o valor ? é atribuido ao mesmo o valor NaN (equivalente ao NA)
+df.replace('?', np.NaN, inplace = True)
+\end{lstlisting}
+
+Ap\'os efetuada a altera\c c\~ao, verificou-se quais as colunas que continham valores NaN e quantas linhas existiam com os mesmos.
+
+\begin{lstlisting}
+# Verifica quais as colunas com valores nulos
+null_columns = df.columns[df.isnull().any()]
+
+# Conta o número de celulas com valores nulos
+print(df[null_columns].isnull().sum())
+\end{lstlisting}
+
 \end{document}
