@@ -6,6 +6,7 @@ import numpy as np
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csv
 df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
                  header = None)
+#Tenho duvida
 
 # Mostra as primeiras 5 linhas do ficheiro/data frame
 print(df.head())
