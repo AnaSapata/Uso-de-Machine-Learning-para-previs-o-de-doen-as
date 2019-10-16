@@ -1,12 +1,15 @@
 #importação da biblioteca pandas, quando for necessário usar a mesma irá ser utilizado pd em vez de pandas
 import pandas as pd
 import numpy as np
+from sklearn.impute import SimpleImputer
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+
 
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csv
-df = pd.read_csv('/home/jsm/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
                  header = None)
-#Tenho duvida
 
 # Mostra as primeiras 5 linhas do ficheiro/data frame
 print(df.head())
@@ -44,29 +47,38 @@ null_columns = df.columns[df.isnull().any()]
 # Conta o número de celulas com valores nulos
 print(df[null_columns].isnull().sum())
 
+# Verificar o tipo dos elementos das colunas 2:10 antes de proceder à alteração
+print(df.dtypes)
+
+# Passar os elementos das colunas 2:10 para o tipo numerico
+df.iloc[:,1:9] = df.iloc[:,1:9].apply(lambda x: pd.to_numeric(x),1)
+
+# Verificar se os elementos das colunas referidas já se encontram todos em formato numerico
+print(df.dtypes)
 
 
+# https://scikit-learn.org/stable/modules/impute.html
+# Informar de como deverá ser feito o impute dos dados
+imp = SimpleImputer(missing_values = np.NaN, strategy = 'mean')
+# Verificar o que está a ser aplicado
+imp.fit(df.iloc[:,1:9])
 
+# Realizar a transformação dos dados
+df_impute = imp.transform(df.iloc[:,1:9])
+# Uma vez que o df_impute é do tipo numpy.ndarray é utilizado o metodo savetxt do numpy para
+# guardar os resultados obtidos e verificar que já não existem NaN
+np.savetxt('/home/anasapata/Personal/ProjetoIntegrado/teste.csv', df_impute, delimiter = ";")
 
+# Utilizar outro mmetodo para impute
+imp2 = IterativeImputer(max_iter = 10, random_state = 0)
+imp2.fit(df.iloc[:,1:9])
+df_impute2 = imp2.transform(df.iloc[:,1:9])
+np.savetxt('/home/anasapata/Personal/ProjetoIntegrado/teste_2.csv', df_impute2, delimiter = ";")
 
-# DADOS A FALTAR DO INPUT /////////////////////////////////////////////////////////
+#df_impute2['classes'] = df_impute2['classes'].astype('category')
+#print( 'Aqui')
+#print(df_impute2)
+#pd.concat(df.iloc[:,0], df_impute2, df.iloc[:,10])
+#ben = df_impute2[df_impute2.classes == 'bening']
+#print(ben.shape)
 
-# Cod em Python ---------------- bc_data[,2:10] <- apply(bc_data[, 2:10],2, function(x) as.numeric(as.character(x)))
-
-df.loc[,2:10)] = df.loc[,2:10)].apply(lambda x: pd.to_numeric(x),1)
-
-# HELP                dataset_impute <- mice(bc_data[, 2:10],  print = FALSE)
-
-# HELP                bc_data <- cbind(bc_data[, 11, drop = FALSE],
-# HELP                mice::complete(dataset_impute, 1))
-
-# Cod em Python ---------------- bc_data$classes <-as.factor(bc_data$classes)
-df.classes = df.astype(df.classes) 
-
-# QUAntos casos benignos e malignos existem ?
-
-# Cod em Python ---------------- summary(bc_data$classes)
-
-summary = df.describe()
-summary = summary.transpose()
-summary.head()
