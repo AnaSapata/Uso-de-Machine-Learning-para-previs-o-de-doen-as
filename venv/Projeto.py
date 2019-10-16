@@ -4,7 +4,7 @@ import numpy as np
 
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csv
-df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+df = pd.read_csv('/home/jsm/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
                  header = None)
 #Tenho duvida
 
@@ -43,3 +43,31 @@ null_columns = df.columns[df.isnull().any()]
 
 # Conta o número de celulas com valores nulos
 print(df[null_columns].isnull().sum())
+
+
+
+
+
+
+# DADOS A FALTAR DO INPUT /////////////////////////////////////////////////////////
+
+# Cod em Python ---------------- bc_data[,2:10] <- apply(bc_data[, 2:10],2, function(x) as.numeric(as.character(x)))
+
+df.loc[,2:10)] = df.loc[,2:10)].apply(lambda x: pd.to_numeric(x),1)
+
+# HELP                dataset_impute <- mice(bc_data[, 2:10],  print = FALSE)
+
+# HELP                bc_data <- cbind(bc_data[, 11, drop = FALSE],
+# HELP                mice::complete(dataset_impute, 1))
+
+# Cod em Python ---------------- bc_data$classes <-
+as.factor(bc_data$classes)
+df.classes = df.astype(df.classes) 
+
+# QUAntos casos benignos e malignos existem ?
+
+# Cod em Python ---------------- summary(bc_data$classes)
+
+summary = df.describe()
+summary = summary.transpose()
+summary.head()
