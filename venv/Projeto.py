@@ -60,8 +60,7 @@ df.loc[,2:10)] = df.loc[,2:10)].apply(lambda x: pd.to_numeric(x),1)
 # HELP                bc_data <- cbind(bc_data[, 11, drop = FALSE],
 # HELP                mice::complete(dataset_impute, 1))
 
-# Cod em Python ---------------- bc_data$classes <-
-as.factor(bc_data$classes)
+# Cod em Python ---------------- bc_data$classes <-as.factor(bc_data$classes)
 df.classes = df.astype(df.classes) 
 
 # QUAntos casos benignos e malignos existem ?
