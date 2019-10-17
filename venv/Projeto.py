@@ -107,3 +107,28 @@ ben = df_final[df_final.classes == 'benign']
 mal = df_final[df_final.classes == 'malignant']
 summary_classes = 'benign     malignant\n' + str(ben.shape[0]) + '        ' + str(mal.shape[0])
 print(summary_classes)
+
+# Histograma
+print("Cancer data set dimensions : {}".format(df.shape)) #Dimensão de Conjunto de dados
+
+dados=df['classes']
+bem=0;
+mau=0;
+for i in range (len(dados)):
+  if(dados[i])=="benign":
+    bem+=1;
+  else:
+    mau+=1;
+
+print (bem)
+print(mau)
+
+
+x = np.arange(2)
+colors = ['green', 'red']
+plt.bar(x, height= [bem,mau], color=colors )
+plt.xticks(x, ['benign','malignant'])
+plt.xlabel('classes')
+plt.ylabel('count')
+plt.title('Prevenção de Doenças')
+plt.show()
