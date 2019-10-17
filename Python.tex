@@ -437,4 +437,85 @@ null_columns = df.columns[df.isnull().any()]
 print(df[null_columns].isnull().sum())
 \end{lstlisting}
 
+Ap\'os efetuada a contagem de celulas que n\~ao t\^em valor, todas as colunas excepto a primeira e ultima s\~ao passadas para o formato numerico, ficando do tipo float64.
+
+\begin{lstlisting}
+# Verificar o tipo dos elementos das colunas 1:10 antes de proceder à alteração
+print(df.dtypes)
+
+# Passar os elementos das colunas 2:10 para o tipo numerico
+df.iloc[:,1:10] = df.iloc[:,1:10].apply(lambda x: pd.to_numeric(x),1)
+
+# Verificar se os elementos das colunas referidas já se encontram todos em formato numerico
+print(df.dtypes)
+\end{lstlisting}
+
+Para contornar o problema da existencia de celulas sem valores \'e utilizado um m\'etodo para gerar os mesmos, quer seja atrav\'es da m\'edia dos valores dessa coluna quer seja por outro meio. Para tal utilizou a biblioteca scikit-learn eos seus metodos \textit{SimpleImputer} e \textit{IteartiveImputer}, verificando-se que o segundo produz resultados mais semelhantes aos obtidos no R, contudo com algumas diferenças.
+
+\begin{lstlisting}
+# https://scikit-learn.org/stable/modules/impute.html
+# Informar de como deverá ser feito o impute dos dados
+imp = SimpleImputer(missing_values = np.NaN, strategy = 'mean')
+# Verificar o que está a ser aplicado
+imp.fit(df.iloc[:,1:10])
+
+# Realizar a transformação dos dados
+df_impute = imp.transform(df.iloc[:,1:10])
+# Uma vez que o df_impute é do tipo numpy.ndarray é utilizado o metodo savetxt do numpy para
+# guardar os resultados obtidos e verificar que já não existem NaN
+np.savetxt('/home/anasapata/Personal/ProjetoIntegrado/teste.csv', df_impute, delimiter = ";")
+
+# Utilizar outro metodo para impute
+imp2 = IterativeImputer(max_iter = 10, random_state = 0)
+imp2.fit(df.iloc[:,1:10])
+df_impute2 = imp2.transform(df.iloc[:,1:10])
+np.savetxt('/home/anasapata/Personal/ProjetoIntegrado/teste_2.csv', df_impute2, delimiter = ";")
+\end{lstlisting}
+
+Os dados gerados foram guardados em dois ficheiros de teste de modo a verificar se os mesmos eram iguais aos gerados pelo R. 
+Como os dados gerados pelos metodos de impute são no formato numpy.ndarray os mesmos foram transformados numa data frame de modo a ser possivel mais tarde fazer o merge destes com a coluna das classes. Para al\'em disto foram atribuidos aos mesmos os nomes das respetivas colunas bem como alterado o tipo dos dados para inteiros.
+
+\begin{lstlisting}
+# Como o resultado do impute é um numpy ndarray existe a necessidade de passar o mesmo para o formato data frame
+df_impute2_df = pd.DataFrame(data = df_impute2)
+
+# atribuir o nome das colunas aos dados onde foi resultado o impute
+df_impute2_df.columns = ['clump_thickness',
+              'uniformity_of_cell_size',
+              'uniformity_of_cell_shape',
+              'marginal_adhesion',
+              'single_epithelial_cell_size',
+              'bare_nuclei',
+              'bland_chromatin',
+              'normal_nucleoli',
+              'mitosis']
+
+# Converter todas as colunas para inteiro
+df_impute2_df = df_impute2_df.astype('int64')
+\end{lstlisting}
+
+Para efetuar o merge entre os dados obtidos pelo m\'etodo do impute e a coluna \textit{classes}, os dados desta ultima foram guardados numa variavel (\textit{cf}), teno posteriormente sido criado um array (\textit{L}) que continha esta coluna e os dados do impute.
+Foi utilizado o comando \textit{concat} da biblioteca pandas de modo a fazer o merge das duas data frames contidas no array \textit{L}.
+
+\begin{lstlisting}
+# Selecionar a ultima coluna do data frame original para se poder efetuar o merge com os dados com o impute
+cf = df.iloc[:,10]
+
+# Colocar todas as data frames a juntar num array
+L = [cf, df_impute2_df]
+# Fazer o merge de todos os dados
+df_final = pd.concat(L, axis = 1)
+\end{lstlisting}
+
+Uma vez que os dados da coluna \textit{classes} s\~ao categoricos os mesmos foram alterados para serem deste tipo. Ap\'os esta altera\c c\~ao foram ent\~ao verificados quantos casos de doentes com cancro maligno e benigno exitiam.
+
+\begin{lstlisting}
+# Definir a coluna classes como uma variavel categorica
+df_final['classes'] = df_final['classes'].astype('category')
+
+ben = df_final[df_final.classes == 'benign']
+mal = df_final[df_final.classes == 'malignant']
+summary_classes = 'benign     malignant\n' + str(ben.shape[0]) + '        ' + str(mal.shape[0])
+print(summary_classes)
+\end{lstlisting}
 \end{document}
