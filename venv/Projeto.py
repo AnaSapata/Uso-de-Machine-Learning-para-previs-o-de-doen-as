@@ -132,3 +132,6 @@ plt.xlabel('classes')
 plt.ylabel('count')
 plt.title('Prevenção de Doenças')
 plt.show()
+
+
+# Investigar PCA
