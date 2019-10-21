@@ -135,17 +135,6 @@ plt.show()
 
 
 # Investigar PCA
-<<<<<<< HEAD
-
-
-
-
-
-
-
-
-
-
 
 #------------------Treinamento, validacao e teste dos dados-------------------------------------------- 
 
@@ -156,6 +145,5 @@ random.seed(42)
 	from sklearn import datasets
 
 	X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
-=======
+
 # grafico de barra
->>>>>>> grafico de barra
