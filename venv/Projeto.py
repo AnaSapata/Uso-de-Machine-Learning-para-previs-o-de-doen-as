@@ -111,9 +111,14 @@ print(summary_classes)
 # Histograma
 print("Cancer data set dimensions : {}".format(df.shape)) #Dimensão de Conjunto de dados
 
+# Obtenção da variavel classes
 dados=df['classes']
+# Atribuição do valor 0 à variavel bem
 bem=0;
+#Atribuição do valor 0 à variavel mau
 mau=0;
+
+# Ciclo for que irá contar o número de pessoas com cancro benigno e com cancro maligno
 for i in range (len(dados)):
   if(dados[i])=="benign":
     bem+=1;
@@ -135,6 +140,7 @@ plt.show()
 
 
 # Investigar PCA
+# Necessário obter os dados sem a primeira coluna e fazer a sua transposta
 
 #------------------Treinamento, validacao e teste dos dados-------------------------------------------- 
 
