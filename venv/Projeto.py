@@ -9,8 +9,11 @@ from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
-# Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csv
-df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+# Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csvx-special/nautilus-clipboard
+copy
+file:///home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv
+
+df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
                  header = None)
 
 # Mostra as primeiras 5 linhas do ficheiro/data frame
@@ -189,3 +192,12 @@ print('Explained variation per principal component: {}'.format(pca_2.singular_va
 # X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
 
 # grafico de barra
+df = pd.df_final({
+    "x": np.random.normal(0, 2.5, 5),
+    "y": np.random.normal(0, 50, 100),
+    "z": np.random.normal(0, 50, 100)
+})
+df = pd.melt(df)
+
+ggplot(aes(x='value', color='variable'), data=df) + \
+    geom_histogram()
