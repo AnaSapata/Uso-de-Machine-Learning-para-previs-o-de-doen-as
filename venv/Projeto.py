@@ -4,7 +4,9 @@ import numpy as np
 from sklearn.impute import SimpleImputer
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
-
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
 
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csv
@@ -12,7 +14,7 @@ df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learn
                  header = None)
 
 # Mostra as primeiras 5 linhas do ficheiro/data frame
-print(df.head())
+# print(df.head())
 
 # Uma vez que o ficheiro não tem nome para as colunas, tal como acontece posteriormente com a data frame
 # é então necessário atribuir os respetivos nomes às mesmas para tal
@@ -29,14 +31,14 @@ df.columns = ['sample_code_number',
               'classes']
 
 # Mostrar novamente as primeira 5 linhas de modo a confirmar que os nomes das colunas lhes foram atru«ibuidos
-print(df.head())
+# print(df.head())
 
 # Quando classes tem o valor 2 deverá torna-se "benign", quando tem o valor 4 deverá tornar-se "malignant" e nos restantes casos NA
 df.classes.replace([2, 4], ['benign', 'malignant'], inplace = True)
 
 # Verificar que alterou os valores
-print(df.head())
-print(df.tail())
+# print(df.head())
+# print(df.tail())
 
 # Quando existe o valor ? é atribuido ao mesmo o valor NaN (equivalente ao NA)
 df.replace('?', np.NaN, inplace = True)
@@ -45,16 +47,17 @@ df.replace('?', np.NaN, inplace = True)
 null_columns = df.columns[df.isnull().any()]
 
 # Conta o número de celulas com valores nulos
+print("Numero de celulas sem valor")
 print(df[null_columns].isnull().sum())
 
 # Verificar o tipo dos elementos das colunas 1:10 antes de proceder à alteração
-print(df.dtypes)
+# print(df.dtypes)
 
 # Passar os elementos das colunas 2:10 para o tipo numerico
 df.iloc[:,1:10] = df.iloc[:,1:10].apply(lambda x: pd.to_numeric(x),1)
 
 # Verificar se os elementos das colunas referidas já se encontram todos em formato numerico
-print(df.dtypes)
+# print(df.dtypes)
 
 
 # https://scikit-learn.org/stable/modules/impute.html
@@ -112,26 +115,26 @@ print(summary_classes)
 print("Cancer data set dimensions : {}".format(df.shape)) #Dimensão de Conjunto de dados
 
 # Obtenção da variavel classes
-dados=df['classes']
-# Atribuição do valor 0 à variavel bem
-bem=0;
-#Atribuição do valor 0 à variavel mau
-mau=0;
+dados=df_final['classes']
+# Atribuição do valor 0 à variavel ben
+ben=0;
+#Atribuição do valor 0 à variavel mal
+mal=0;
 
 # Ciclo for que irá contar o número de pessoas com cancro benigno e com cancro maligno
-for i in range (len(dados)):
-  if(dados[i])=="benign":
-    bem+=1;
-  else:
-    mau+=1;
+#for i in range (len(dados)):
+#  if(dados[i])=="benign":
+#    ben+=1;
+#  else:
+#    mal+=1;
 
-print (bem)
-print(mau)
+#print (ben)
+#print(mal)
 
-
+# Não está a funcionar corretamente!
 x = np.arange(2)
 colors = ['green', 'red']
-plt.bar(x, height= [bem,mau], color=colors )
+plt.bar(x, height= [ben,mal], color=colors )
 plt.xticks(x, ['benign','malignant'])
 plt.xlabel('classes')
 plt.ylabel('count')
@@ -141,15 +144,48 @@ plt.show()
 
 # Investigar PCA
 # Necessário obter os dados sem a primeira coluna e fazer a sua transposta
+df_without_classes = df_final.iloc[:,1:]
+df_without_classes_transpose = df_without_classes.transpose()
+df_normalize = StandardScaler().fit_transform(df_without_classes_transpose)
+# Confirmação da normalização dos dados
+# print("(" + str(np.mean(df_normalize)) +","+str(np.std(df_normalize))+")")
+
+# Irão ser encontradas duas componentes principais (2)
+pca_2 = PCA(n_components = 2)
+# Aplicado PCA aos dados
+principalComponents_2 = pca_2.fit_transform(df_without_classes_transpose)
+# Data Frame para observação do valor de cada variavel na respetica componente
+principal_Df_2 = pd.DataFrame(data = principalComponents_2
+             , columns = ['principal component 1', 'principal component 2'])
+print(principal_Df_2.tail())
+
+# PCA (9)
+pca_9 = PCA(n_components = 9)
+principalComponents_9 = pca_9.fit_transform(df_without_classes_transpose)
+principalComponents_Df = pd.DataFrame(data = pca_9.components_.transpose(),
+              columns = ['PC1',
+              'PC2',
+              'PC3',
+              'PC4',
+              'PC5',
+              'PC6',
+              'PC7',
+              'PC8',
+              'PC9'])
+principalComponents_Df['Group'] = df_final['classes']
+print(principalComponents_Df.head())
+# Percentagem de explicação de cada componente
+print('Explained variation per principal component: {}'.format(pca_2.explained_variance_ratio_))
+print('Explained variation per principal component: {}'.format(pca_2.singular_values_))
 
 #------------------Treinamento, validacao e teste dos dados-------------------------------------------- 
 
-random.seed(42)
+#random.seed(42)
 
-	#createDataPartition
-	from sklearn.cross_validation import train_test_split
-	from sklearn import datasets
+# createDataPartition
+# from sklearn.cross_validation import train_test_split
+# from sklearn import datasets
 
-	X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
+# X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
 
 # grafico de barra
