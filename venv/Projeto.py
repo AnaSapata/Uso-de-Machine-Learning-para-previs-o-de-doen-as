@@ -7,13 +7,15 @@ from sklearn.impute import IterativeImputer
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
+from sklearn.neighbors import KNeighborsRegressor
 
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csvx-special/nautilus-clipboard
 
-
-df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
                  header = None)
+# df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+#                 header = None)
 
 # Mostra as primeiras 5 linhas do ficheiro/data frame
 # print(df.head())
@@ -63,6 +65,8 @@ df.iloc[:,1:10] = df.iloc[:,1:10].apply(lambda x: pd.to_numeric(x),1)
 
 
 # https://scikit-learn.org/stable/modules/impute.html
+# https://scikit-learn.org/stable/auto_examples/impute/plot_missing_values.html#sphx-glr-auto-examples-impute-plot-missing-values-py
+# https://scikit-learn.org/stable/auto_examples/impute/plot_iterative_imputer_variants_comparison.html#sphx-glr-auto-examples-impute-plot-iterative-imputer-variants-comparison-py
 # Informar de como deverá ser feito o impute dos dados
 imp = SimpleImputer(missing_values = np.NaN, strategy = 'mean')
 # Verificar o que está a ser aplicado
@@ -72,13 +76,15 @@ imp.fit(df.iloc[:,1:10])
 df_impute = imp.transform(df.iloc[:,1:10])
 # Uma vez que o df_impute é do tipo numpy.ndarray é utilizado o metodo savetxt do numpy para
 # guardar os resultados obtidos e verificar que já não existem NaN
-np.savetxt('/home/raquel/teste.csv', df_impute, delimiter = ";")
+np.savetxt('/home/anasapata/Personal/ProjetoIntegrado/teste.csv', df_impute, delimiter = ";")
+# np.savetxt('/home/raquel/teste.csv', df_impute, delimiter = ";")
 
 # Utilizar outro metodo para impute
-imp2 = IterativeImputer(max_iter = 10, random_state = 0)
+imp2 = IterativeImputer(estimator = KNeighborsRegressor(n_neighbors = 15), random_state = 0)
 imp2.fit(df.iloc[:,1:10])
 df_impute2 = imp2.transform(df.iloc[:,1:10])
-np.savetxt('/home/raquel/teste_2.csv', df_impute2, delimiter = ";")
+np.savetxt('/home/anasapata/Personal/ProjetoIntegrado/teste_2_2.csv', df_impute2, delimiter = ";")
+# np.savetxt('/home/raquel/teste_2.csv', df_impute2, delimiter = ";")
 
 # Como o resultado do impute é um numpy ndarray existe a necessidade de passar o mesmo para o formato data frame
 df_impute2_df = pd.DataFrame(data = df_impute2)
@@ -118,25 +124,10 @@ print("Cancer data set dimensions : {}".format(df.shape)) #Dimensão de Conjunto
 
 # Obtenção da variavel classes
 dados=df_final['classes']
-# Atribuição do valor 0 à variavel ben
-ben=0;
-#Atribuição do valor 0 à variavel mal
-mal=0;
 
-# Ciclo for que irá contar o número de pessoas com cancro benigno e com cancro maligno
-#for i in range (len(dados)):
-#  if(dados[i])=="benign":
-#    ben+=1;
-#  else:
-#    mal+=1;
-
-#print (ben)
-#print(mal)
-
-# Não está a funcionar corretamente!
 x = np.arange(2)
 colors = ['green', 'red']
-plt.bar(x, height= [ben,mal], color=colors )
+plt.bar(x, height= [ben.shape[0],mal.shape[0]], color=colors )
 plt.xticks(x, ['benign','malignant'])
 plt.xlabel('classes')
 plt.ylabel('count')
@@ -144,7 +135,6 @@ plt.title('Prevenção de Doenças')
 plt.show()
 
 
-# Investigar PCA
 # Necessário obter os dados sem a primeira coluna e fazer a sua transposta
 df_without_classes = df_final.iloc[:,1:]
 df_without_classes_transpose = df_without_classes.transpose()
@@ -152,18 +142,17 @@ df_normalize = StandardScaler().fit_transform(df_without_classes_transpose)
 # Confirmação da normalização dos dados
 # print("(" + str(np.mean(df_normalize)) +","+str(np.std(df_normalize))+")")
 
-# Irão ser encontradas duas componentes principais (2)
-pca_2 = PCA(n_components = 2)
+# Irão ser encontradas duas componentes principais (9)
+pca_9 = PCA(n_components = 9, svd_solver = 'full')
 # Aplicado PCA aos dados
-principalComponents_2 = pca_2.fit_transform(df_without_classes_transpose)
-# Data Frame para observação do valor de cada variavel na respetica componente
-principal_Df_2 = pd.DataFrame(data = principalComponents_2
-             , columns = ['principal component 1', 'principal component 2'])
-print(principal_Df_2.tail())
-
-# PCA (9)
-pca_9 = PCA(n_components = 9)
 principalComponents_9 = pca_9.fit_transform(df_without_classes_transpose)
+
+# Data Frame para observação do valor de cada variavel na respetica componente
+principal_Df_2 = pd.DataFrame(data = pca_9.components_[:,[0,1]]
+             , columns = ['principal component 1', 'principal component 2'])
+print(principal_Df_2)
+
+
 principalComponents_Df = pd.DataFrame(data = pca_9.components_.transpose(),
               columns = ['PC1',
               'PC2',
@@ -177,8 +166,9 @@ principalComponents_Df = pd.DataFrame(data = pca_9.components_.transpose(),
 principalComponents_Df['Group'] = df_final['classes']
 print(principalComponents_Df.head())
 # Percentagem de explicação de cada componente
-print('Explained variation per principal component: {}'.format(pca_2.explained_variance_ratio_))
-print('Explained variation per principal component: {}'.format(pca_2.singular_values_))
+print('Explained variation per principal component: {}'.format(pca_9.explained_variance_ratio_))
+print('Vetores pp per principal component: {}'.format(pca_9.singular_values_))
+
 
 #------------------Treinamento, validacao e teste dos dados-------------------------------------------- 
 
@@ -191,6 +181,7 @@ print('Explained variation per principal component: {}'.format(pca_2.singular_va
 # X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
 
 # grafico de barra
+'''
 df = pd.df_final({
     "x": np.random.normal(0, 2.5, 5),
     "y": np.random.normal(0, 50, 100),
@@ -200,3 +191,4 @@ df = pd.melt(df)
 
 ggplot(aes(x='value', color='variable'), data=df) + \
     geom_histogram()
+'''
