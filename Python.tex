@@ -507,7 +507,7 @@ L = [cf, df_impute2_df]
 df_final = pd.concat(L, axis = 1)
 \end{lstlisting}
 
-Uma vez que os dados da coluna \textit{classes} s\~ao categoricos os mesmos foram alterados para serem deste tipo. Ap\'os esta altera\c c\~ao foram ent\~ao verificados quantos casos de doentes com cancro maligno e benigno exitiam.
+Uma vez que os dados da coluna \textit{classes} s\~ao categoricos os mesmos foram alterados para serem deste tipo. Ap\'os esta altera\c c\~ao foram ent\~ao verificados quantos casos de doentes com cancro maligno e benigno existiam.
 
 \begin{lstlisting}
 # Definir a coluna classes como uma variavel categorica
@@ -519,6 +519,30 @@ summary_classes = 'benign     malignant\n' + str(ben.shape[0]) + '        ' + st
 print(summary_classes)
 \end{lstlisting}
 
-C\'odigo Histograma
+Cria\c c\~ao de histograma que mostra a quantidade de casos benignos e malignos.
+
+\begin{lstlisting}
+dados=df_final['classes']
+
+x = np.arange(2)
+colors = ['green', 'red']
+plt.bar(x, height= [ben.shape[0],mal.shape[0]], color=colors )
+plt.xticks(x, ['benign','malignant'])
+plt.xlabel('classes')
+plt.ylabel('count')
+plt.title('Prevenção de Doenças')
+plt.show()
+\end{lstlisting}
+
+Ap\'os o tratamento dos dados ir\'a aggora proceder-se a uma an\'alise explorat\'oria dos mesmo, comec\ cando-se pela execuc\ c\~ao de uma An\'alise de Componentes Principais. Para tal foi necess\'ario criar uma dataframe sem a coluna das classes e posteriormente efetuar a sua transposta. 
+
+Para se poder aplicar a an\'alise de componentes principais os dados anteriormente mencionados foram normalizados.
+
+\begin{lstlisting}
+# Necessário obter os dados sem a primeira coluna e fazer a sua transposta
+df_without_classes = df_final.iloc[:,1:]
+df_without_classes_transpose = df_without_classes.transpose()
+df_normalize = StandardScaler().fit_transform(df_without_classes_transpose)
+\end{lstlisting}
 
 \end{document}
