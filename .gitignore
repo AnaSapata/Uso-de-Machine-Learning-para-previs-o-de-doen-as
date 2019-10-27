@@ -1,4 +1,14 @@
-"*.aux"
-"*.log"
-"*.synctex.gz"
-"*.tex"
+*.aux
+*.log
+*.synctex.gz
+*.tex
+
+# Ignoring folder venv/bin
+venv/bin/
+
+# Ignoring folder venv/lib and venv/lib64
+venv/lib/
+venv/lib64/
+
+#Ignoring file pyvenv.cfg
+pyvenv.cfg
