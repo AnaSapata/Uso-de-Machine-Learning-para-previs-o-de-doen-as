@@ -12,10 +12,10 @@ from sklearn.neighbors import KNeighborsRegressor
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csvx-special/nautilus-clipboard
 
-df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
-                 header = None)
-# df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+#df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
 #                 header = None)
+df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+                 header = None)
 
 # Mostra as primeiras 5 linhas do ficheiro/data frame
 # print(df.head())
@@ -76,15 +76,15 @@ imp.fit(df.iloc[:,1:10])
 df_impute = imp.transform(df.iloc[:,1:10])
 # Uma vez que o df_impute é do tipo numpy.ndarray é utilizado o metodo savetxt do numpy para
 # guardar os resultados obtidos e verificar que já não existem NaN
-np.savetxt('/home/raquel/teste.csv', df_impute, delimiter = ";")
 # np.savetxt('/home/raquel/teste.csv', df_impute, delimiter = ";")
+# np.savetxt('/home/anasapata/Personal/ProjetoIntegrado/teste.csv', df_impute, delimiter = ";")
 
 # Utilizar outro metodo para impute
 imp2 = IterativeImputer(estimator = KNeighborsRegressor(n_neighbors = 15), random_state = 0)
 imp2.fit(df.iloc[:,1:10])
 df_impute2 = imp2.transform(df.iloc[:,1:10])
-np.savetxt('/home/raquel/teste_2_2.csv', df_impute2, delimiter = ";")
-# np.savetxt('/home/raquel/teste_2.csv', df_impute2, delimiter = ";")
+# np.savetxt('/home/raquel/teste_2_2.csv', df_impute2, delimiter = ";")
+# np.savetxt('/home/anasapata/Personal/ProjetoIntegrado/teste_2.csv', df_impute2, delimiter = ";")
 
 # Como o resultado do impute é um numpy ndarray existe a necessidade de passar o mesmo para o formato data frame
 df_impute2_df = pd.DataFrame(data = df_impute2)
@@ -166,7 +166,7 @@ principalComponents_Df = pd.DataFrame(data = pca_9.components_.transpose(),
 principalComponents_Df['Group'] = df_final['classes']
 print(principalComponents_Df.head())
 # Percentagem de explicação de cada componente
-print('Explained variation per principal component: {}'.format(pca_9.explained_variance_ratio_))
+print('Explained variation per principal component: {}'.format(pca_9.explained_variance_ratio_[0]))
 print('Vetores pp per principal component: {}'.format(pca_9.singular_values_))
 
 
@@ -179,7 +179,7 @@ print('Vetores pp per principal component: {}'.format(pca_9.singular_values_))
 # from sklearn import datasets
 
 # X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
-
+'''
 # grafico de barra
 df = pd.DataFrame({
     "x": np.random.normal(0, 10, 1000),
@@ -190,3 +190,4 @@ df = pd.melt(df)
 
 ggplot(aes(x='value', color='variable'), data=df) + \
     geom_histogram()
+'''
