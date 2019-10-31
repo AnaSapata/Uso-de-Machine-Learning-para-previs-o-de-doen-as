@@ -179,7 +179,7 @@ print('Vetores pp per principal component: {}'.format(pca_9.singular_values_))
 # from sklearn import datasets
 
 # X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
-#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------?
 '''
 # grafico de barra
 df = pd.DataFrame({
