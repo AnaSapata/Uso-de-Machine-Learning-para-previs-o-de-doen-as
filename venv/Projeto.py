@@ -169,17 +169,16 @@ print(principalComponents_Df.head())
 print('Explained variation per principal component: {}'.format(pca_9.explained_variance_ratio_[0]))
 print('Vetores pp per principal component: {}'.format(pca_9.singular_values_))
 
-
 #------------------Treinamento, validacao e teste dos dados-------------------------------------------- 
 
-#random.seed(42)
+random.seed(42)
 
-# createDataPartition
-# from sklearn.cross_validation import train_test_split
-# from sklearn import datasets
+#createDataPartition
+from sklearn.cross_validation import train_test_split
+from sklearn import datasets
 
-# X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
-#------------------------------------------------------------------------------?
+X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
+
 '''
 # grafico de barra
 df = pd.DataFrame({
