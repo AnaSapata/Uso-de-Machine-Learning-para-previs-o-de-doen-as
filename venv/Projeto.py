@@ -143,11 +143,11 @@ df_normalize = StandardScaler().fit_transform(df_without_classes_transpose)
 # print("(" + str(np.mean(df_normalize)) +","+str(np.std(df_normalize))+")")
 
 # Irão ser encontradas duas componentes principais (9)
-pca_9 = PCA(n_components = 9, svd_solver = 'full')
+pca_9 = PCA(n_components = 9)
 # Aplicado PCA aos dados
-principalComponents_9 = pca_9.fit_transform(df_without_classes_transpose)
+principalComponents_9 = pca_9.fit_transform(df_normalize)
 
-# Data Frame para observação do valor de cada variavel na respetica componente
+# Data Frame para observação do valor de cada variavel na respetiva componente
 principal_Df_2 = pd.DataFrame(data = pca_9.components_[:,[0,1]]
              , columns = ['principal component 1', 'principal component 2'])
 print(principal_Df_2)
@@ -169,15 +169,36 @@ print(principalComponents_Df.head())
 print('Explained variation per principal component: {}'.format(pca_9.explained_variance_ratio_[0]))
 print('Vetores pp per principal component: {}'.format(pca_9.singular_values_))
 
+plt.figure()
+#plt.figure(figsize=(10,10))
+#plt.xticks(fontsize=12)
+#plt.yticks(fontsize=14)
+plt.xlabel('Principal Component - 1',fontsize=20)
+plt.ylabel('Principal Component - 2',fontsize=20)
+plt.title("Principal Component Analysis of Breast Cancer Dataset",fontsize=20)
+ben_array = principalComponents_Df['Group']=='benign'
+ben_array_1 = principalComponents_Df[principalComponents_Df[ben_array,:],'PC1']
+print('BEN ARRAY')
+print(ben_array_1)
+targets = ['Benign', 'Malignant']
+colors = ['r', 'g']
+for target, color in zip(targets,colors):
+    indicesToKeep = principalComponents_Df['Group'] == target
+    plt.scatter(principalComponents_Df.loc[indicesToKeep, 'PC1']
+               , principalComponents_Df.loc[indicesToKeep, 'PC2'], c = color, s = 50)
+
+plt.legend(targets,prop={'size': 15})
+plt.show()
+
 #------------------Treinamento, validacao e teste dos dados-------------------------------------------- 
 
-random.seed(42)
+#random.seed(42)
 
 #createDataPartition
-from sklearn.cross_validation import train_test_split
-from sklearn import datasets
+#from sklearn.model_selection import train_test_split
+#from sklearn import datasets
 
-X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
+#X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
 
 
 #Grafico GGPLOT2---------------------------------------
