@@ -179,6 +179,9 @@ from sklearn import datasets
 
 X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
 
+
+#Grafico GGPLOT---------------------------------------
+
 '''
 # grafico de barra
 df = pd.DataFrame({
