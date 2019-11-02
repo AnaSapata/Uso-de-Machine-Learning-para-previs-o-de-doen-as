@@ -14,7 +14,7 @@ from sklearn.neighbors import KNeighborsRegressor
 
 #df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
 #                 header = None)
-df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
                  header = None)
 
 # Mostra as primeiras 5 linhas do ficheiro/data frame
@@ -135,7 +135,7 @@ plt.title('Prevenção de Doenças')
 plt.show()
 
 #Response variable for regression
-# Grafico
+# Grafico- http://pandas-docs.github.io/pandas-docs-travis/user_guide/visualization.html In[35],In[36]
 
 df_final['clump_thickness'].hist( figsize=(6, 4),color='c',) #figsize-dimensao do grafico
 plt.xlabel('clump_thickness')
