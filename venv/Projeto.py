@@ -134,6 +134,15 @@ plt.ylabel('count')
 plt.title('Prevenção de Doenças')
 plt.show()
 
+#Response variable for regression
+# Grafico
+
+df_final['clump_thickness'].hist( figsize=(6, 4),color='c',) #figsize-dimensao do grafico
+plt.xlabel('clump_thickness')
+plt.ylabel('count')
+plt.show()
+
+
 
 # Necessário obter os dados sem a primeira coluna e fazer a sua transposta
 df_without_classes = df_final.iloc[:,1:]
@@ -201,17 +210,6 @@ plt.show()
 #X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
 
 
-#Grafico GGPLOT2---------------------------------------
 
-'''
-# grafico de barra
-df = pd.DataFrame({
-    "x": np.random.normal(0, 10, 1000),
-    "y": np.random.normal(0, 10, 1000),
-    "z": np.random.normal(0, 10, 1000)
-})
-df = pd.melt(df)
 
-ggplot(aes(x='value', color='variable'), data=df) + \
-    geom_histogram()
-'''
+
