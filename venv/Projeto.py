@@ -1,20 +1,22 @@
 #importação da biblioteca pandas, quando for necessário usar a mesma irá ser utilizado pd em vez de pandas
 import pandas as pd
 import numpy as np
+import random
+import matplotlib.pyplot as plt
 from sklearn.impute import SimpleImputer
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsRegressor
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split
 
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csvx-special/nautilus-clipboard
 
 #df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
 #                 header = None)
-df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
                  header = None)
 
 # Mostra as primeiras 5 linhas do ficheiro/data frame
@@ -178,18 +180,13 @@ print(principalComponents_Df.head())
 print('Explained variation per principal component: {}'.format(pca_9.explained_variance_ratio_[0]))
 print('Vetores pp per principal component: {}'.format(pca_9.singular_values_))
 
-plt.figure()
-#plt.figure(figsize=(10,10))
-#plt.xticks(fontsize=12)
-#plt.yticks(fontsize=14)
+plt.figure(figsize=(10,10))
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=14)
 plt.xlabel('Principal Component - 1',fontsize=20)
 plt.ylabel('Principal Component - 2',fontsize=20)
 plt.title("Principal Component Analysis of Breast Cancer Dataset",fontsize=20)
-ben_array = principalComponents_Df['Group']=='benign'
-ben_array_1 = principalComponents_Df[principalComponents_Df[ben_array,:],'PC1']
-print('BEN ARRAY')
-print(ben_array_1)
-targets = ['Benign', 'Malignant']
+targets = ['benign', 'malignant']
 colors = ['r', 'g']
 for target, color in zip(targets,colors):
     indicesToKeep = principalComponents_Df['Group'] == target
@@ -201,13 +198,12 @@ plt.show()
 
 #------------------Treinamento, validacao e teste dos dados-------------------------------------------- ?
 
-#random.seed(42)
+random.seed(42)
 
 #createDataPartition
-#from sklearn.model_selection import train_test_split
-#from sklearn import datasets
 
-#X_train, X_test, y_train, y_test = train_test_split(df.classes,test_size=0.7)
+
+training_set, testing_set= train_test_split(df_final,test_size=0.7)
 
 
 
