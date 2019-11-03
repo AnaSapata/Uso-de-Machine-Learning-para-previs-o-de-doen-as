@@ -199,7 +199,7 @@ for target, color in zip(targets,colors):
 plt.legend(targets,prop={'size': 15})
 plt.show()
 
-#------------------Treinamento, validacao e teste dos dados-------------------------------------------- ?ggplot
+#------------------Treinamento, validacao e teste dos dados-------------------------------------------- ?
 
 #random.seed(42)
 
