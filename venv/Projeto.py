@@ -205,6 +205,37 @@ random.seed(42)
 
 training_set, testing_set= train_test_split(df_final,test_size=0.7)
 
+#--------------------------Graficos GGPLOT---------------------------
+#Useful functions 
+#def labels(from_, to_, step_):
+#   return pd.Series(np.arange(from_, to_ + step_, step_)).apply(lambda x: '{:,}'.format(x)).tolist()def breaks(from_, to_, step_):
+#    return pd.Series(np.arange(from_, to_ + step_, step_)).tolist()
+
+#Read data and set index
+
+#data = pd.read_csv(c_remote_data)data = (
+ #   data.filter([
+  #      'abv',
+   #     'ibu',
+    #    'id',
+     #   'name',
+      #  'style',
+       # 'brewery_id',
+        ##'ounces'
+ #   ]).
+  #  set_index('id')
+#)
+#
+#Histogram
+#Initial
+
+#fig = (
+ #   ggplot(data.dropna(subset = ['abv'])) +
+  #  geom_histogram(aes(x = 'abv'))
+#)
+
+#--------------------------------------------------------------------//
+
 
 
 
