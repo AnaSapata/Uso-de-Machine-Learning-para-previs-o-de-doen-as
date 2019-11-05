@@ -10,6 +10,8 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
+import elipse_confidence_plot
+
 
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csvx-special/nautilus-clipboard
@@ -177,23 +179,23 @@ principalComponents_Df = pd.DataFrame(data = pca_9.components_.transpose(),
 principalComponents_Df['Group'] = df_final['classes']
 print(principalComponents_Df.head())
 # Percentagem de explicação de cada componente
-print('Explained variation per principal component: {}'.format(pca_9.explained_variance_ratio_[0]))
+print('Explained variation per principal component: {}'.format(pca_9.explained_variance_ratio_))
 print('Vetores pp per principal component: {}'.format(pca_9.singular_values_))
 
-plt.figure(figsize=(10,10))
-plt.xticks(fontsize=12)
-plt.yticks(fontsize=14)
-plt.xlabel('Principal Component - 1',fontsize=20)
-plt.ylabel('Principal Component - 2',fontsize=20)
-plt.title("Principal Component Analysis of Breast Cancer Dataset",fontsize=20)
+fig, ax = plt.subplots()
+plt.xlabel('PC1: ' + str(round(pca_9.explained_variance_ratio_[0],2)*100) + "% Variance")
+plt.ylabel('PC2: ' + str(round(pca_9.explained_variance_ratio_[1],2)*100) + "% Variance")
+plt.title("Principal Component Analysis of Breast Cancer Dataset")
 targets = ['benign', 'malignant']
 colors = ['r', 'g']
 for target, color in zip(targets,colors):
     indicesToKeep = principalComponents_Df['Group'] == target
     plt.scatter(principalComponents_Df.loc[indicesToKeep, 'PC1']
                , principalComponents_Df.loc[indicesToKeep, 'PC2'], c = color, s = 50)
+    elipse_confidence_plot.confidence_ellipse(principalComponents_Df.loc[indicesToKeep, 'PC1'], principalComponents_Df.loc[indicesToKeep, 'PC2'],
+                       ax, alpha=0.5, facecolor=color, edgecolor=color, zorder=0)
 
-plt.legend(targets,prop={'size': 15})
+plt.legend(targets,prop={'size': 10})
 plt.show()
 
 #------------------Treinamento, validacao e teste dos dados-------------------------------------------- ?

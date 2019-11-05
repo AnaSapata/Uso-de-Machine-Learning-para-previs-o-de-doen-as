@@ -5,6 +5,7 @@
 
 # Ignoring folder venv/bin
 venv/bin/
+venv/_pycache_/
 
 # Ignoring folder venv/lib and venv/lib64
 venv/lib/
