@@ -15,8 +15,7 @@ import matplotlib.cm as cm
 from pandas.api.types import CategoricalDtype
 from plotnine import *
 from plotnine.data import mpg
-#%matplotlib inline
-import ggplot
+import seaborn as sns
 
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csvx-special/nautilus-clipboard
@@ -205,52 +204,16 @@ plt.show()
 
 
 df_final_tidy = pd.melt(df_final, id_vars='classes')
-plt.figure()
-#plt.subplots(3,3)
-#for i in range(df_final_tidy.shape[0]):
-print(df_final_tidy.iloc[0:699, [0,2]])
-print(df_final_tidy.dtypes)
-#df_final_tidy.iloc[0:699, [0,2]].plot.area()
-#plt.show()
-#plt.plot(df_final_tidy.iloc[0:699, [0,2]])
-#df_final_tidy.pivot("classes", "value").plot.area()
+for i in range(len(df_final_tidy['variable'].unique())):
+    df_use = df_final_tidy.iloc[(i*699):((i+1)*699),:]
+    for target in targets:
+        subset = df_use[df_use['classes']==target]
+        sns.distplot(subset['value'], hist=False, kde=True,  kde_kws = {'shade': True, 'linewidth': 1},
+                     label = target)
+    plt.legend(prop={'size': 16}, title = 'Type')
+    plt.title(df_use['variable'].unique())
+    plt.show()
 
-df_use = df_final_tidy.iloc[0:699,:]
-
-
-#(ggplot(df_use)
-# + (aes(x = 'value', color='classes', fill='classes'))
-# + geom_density(alpha=0.3)
-# )
-
-ggplot(df_use, aes(x='value', fill='classes')) +\
-    geom_density(alpha=0.25)
-
-
-
-#y_bening = df_use.loc[df_use['classes'] == 'benign','value']
-#y_malignant = df_use.loc[df_use['classes'] == 'malignant','value']
-#x = range(0,10)
-#plt.stackplot(x, y_bening, y_malignant, labels = ['Bening', 'Malignnant'])
-#plt.legend(loc='upper left')
-#df_use.iloc[:,[0,2]].plot.area(y = 'value')
-#plt.show()
-#fig, ax = plt.subplots()
-#plt.xlabel('PC1: ' + str(round(pca_9.explained_variance_ratio_[0],2)*100) + "% Variance")
-#plt.ylabel('PC2: ' + str(round(pca_9.explained_variance_ratio_[1],2)*100) + "% Variance")
-#plt.title("Principal Component Analysis of Breast Cancer Dataset")
-#print('df_use.shape[0]: '+ str(df_use.shape[0]))
-#x = range(0,df_use.shape[0])
-#colors = ['r', 'g']
-#plt.scatter(x, df_use['value'], c = 'r')
-#targets = ['benign', 'malignant']
-#colors = ['r', 'g']
-#for target, color in zip(targets,colors):
-#    indicesToKeep = df_use['classes'] == target
-#    plt.scatter(x=range(0,len(indicesToKeep)), y = df_use.loc[indicesToKeep, 'value'], c = color, s = 50)
-
-#plt.legend(targets,prop={'size': 10})
-#plt.show()
 #------------------Treinamento, validacao e teste dos dados-------------------------------------------- ?
 
 random.seed(42)

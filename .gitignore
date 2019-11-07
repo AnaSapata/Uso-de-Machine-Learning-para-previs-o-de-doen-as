@@ -6,6 +6,7 @@
 # Ignoring folder venv/bin
 venv/bin/
 venv/_pycache_/
+venv/xgboost/
 
 # Ignoring folder venv/lib and venv/lib64
 venv/lib/

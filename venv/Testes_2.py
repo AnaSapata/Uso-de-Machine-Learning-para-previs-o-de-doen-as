@@ -2,24 +2,25 @@ import unittest
 import pandas as pd
 import numpy as np
 import rpy2.robjects as robjects
+from autoimpute.imputations import SingleImputer, MultipleImputer
 
-class First_Test(unittest.TestCase):
+class MyTestCase(unittest.TestCase):
 
     def setUp(self):
         self.df = pd.read_csv(
             '/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
             header=None)
         self.df.columns = ['sample_code_number',
-                      'clump_thickness',
-                      'uniformity_of_cell_size',
-                      'uniformity_of_cell_shape',
-                      'marginal_adhesion',
-                      'single_epithelial_cell_size',
-                      'bare_nuclei',
-                      'bland_chromatin',
-                      'normal_nucleoli',
-                      'mitosis',
-                      'classes']
+                           'clump_thickness',
+                           'uniformity_of_cell_size',
+                           'uniformity_of_cell_shape',
+                           'marginal_adhesion',
+                           'single_epithelial_cell_size',
+                           'bare_nuclei',
+                           'bland_chromatin',
+                           'normal_nucleoli',
+                           'mitosis',
+                           'classes']
 
         robjects.r(
             'bc_data <- read.table("/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv",'
@@ -42,24 +43,15 @@ class First_Test(unittest.TestCase):
         self.df.iloc[:, 1:10] = self.df.iloc[:, 1:10].apply(lambda x: pd.to_numeric(x), 1)
         robjects.r('bc_data[,2:10] <- apply(bc_data[, 2:10], 2, function(x) as.numeric(as.character(x)))')
 
-    def test_change_classes(self):
+    def test_impute(self):
+        si = SingleImputer(strategy={'bare_nuclei':"pmm"})
+        df_impute = si.fit_transform(self.df.iloc[:,1:10])
+        robjects.r('library(mice)')
+        robjects.r('dataset_impute <- mice(bc_data[, 2:10], print=FALSE)')
+        r_impute = robjects.r('mice::complete(dataset_impute,1)$bare_nuclei')
+        for i in range(df_impute.shape[0]):
+            self.assertEqual(df_impute['bare_nuclei'][i],r_impute[i])
 
-        self.df.classes.replace([2, 4], ['benign', 'malignant'], inplace=True)
-
-        robjects.r('bc_data$classes <- ifelse(bc_data$classes == "2", "benign",'
-                   'ifelse(bc_data$classes == "4", "malignant", NA))')
-
-        for i in range(self.df.shape[0]):
-            self.assertEqual(self.df['classes'][i],robjects.r('bc_data$classes')[i])
-
-    def test_count_na (self):
-        null_columns = self.df.columns[self.df.isnull().any()]
-        sum_na = self.df[null_columns].isnull().sum()
-        self.assertEqual(int(sum_na), robjects.r('as.integer(length(which(is.na(bc_data))))')[0])
-
-    def test_nrow(self):
-        nrow = self.df.shape[0]
-        self.assertEqual(nrow, robjects.r('nrow(bc_data)')[0])
 
 if __name__ == '__main__':
     unittest.main()
