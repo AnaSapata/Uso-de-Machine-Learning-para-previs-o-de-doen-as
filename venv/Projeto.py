@@ -1,3 +1,4 @@
+# coding=utf-8
 #importação da biblioteca pandas, quando for necessário usar a mesma irá ser utilizado pd em vez de pandas
 import pandas as pd
 import numpy as np
@@ -218,11 +219,9 @@ for i in range(len(df_final_tidy['variable'].unique())):
 
 random.seed(42)
 
-#createDataPartition
-
-
 training_set, testing_set= train_test_split(df_final,test_size=0.7)
 
+# FALTAM OS GRÁFICOS!
 #--------------------------Graficos GGPLOT---------------------------
 #Useful functions 
 #def labels(from_, to_, step_):
@@ -256,5 +255,26 @@ training_set, testing_set= train_test_split(df_final,test_size=0.7)
 
 
 
+import statsmodels.api as sm
+classes_training = pd.DataFrame(training_set.as_matrix(columns = ['classes']), columns = ['classes'])
+training_set_normalize = StandardScaler(copy = False).fit_transform(training_set.iloc[:, 1:10])
 
+training_set_normalize = pd.DataFrame(training_set_normalize, columns = ['clump_thickness',
+              'uniformity_of_cell_size',
+              'uniformity_of_cell_shape',
+              'marginal_adhesion',
+              'single_epithelial_cell_size',
+              'bare_nuclei',
+              'bland_chromatin',
+              'normal_nucleoli',
+              'mitosis'])
 
+L2 = [classes_training, training_set_normalize]
+training_set_normalize = pd.concat(L2, axis = 1)
+training_set_normalize_clump = training_set_normalize.loc[:, training_set_normalize.columns !=  'clump_thickness']
+#print(type(training_set_normalize))
+#print(type(training_set_normalize_clump))
+
+model_glm = sm.GLM(training_set_normalize.loc[:, training_set_normalize.columns ==  'clump_thickness'], training_set_normalize_clump)
+#model_results = model_glm.fit()
+#print(model_results)
