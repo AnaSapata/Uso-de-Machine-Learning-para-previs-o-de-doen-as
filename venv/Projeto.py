@@ -17,7 +17,8 @@ from pandas.api.types import CategoricalDtype
 from plotnine import *
 from plotnine.data import mpg
 import seaborn as sns
-import h2o
+import statsmodels.formula.api as smf
+
 
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csvx-special/nautilus-clipboard
@@ -220,8 +221,9 @@ for i in range(len(df_final_tidy['variable'].unique())):
 
 random.seed(42)
 
-training_set, testing_set= train_test_split(df_final,test_size=0.7)
-
+training_set, testing_set= train_test_split(df_final,test_size=0.3, random_state = 42)
+print(testing_set.shape)
+print(training_set.shape)
 # FALTAM OS GRÁFICOS!
 #--------------------------Graficos GGPLOT---------------------------
 #Useful functions 
@@ -255,8 +257,6 @@ training_set, testing_set= train_test_split(df_final,test_size=0.7)
 #--------------------------------------------------------------------//
 
 
-
-import statsmodels.api as sm
 classes_training = pd.DataFrame(training_set.as_matrix(columns = ['classes']), columns = ['classes'])
 training_set_normalize = StandardScaler(copy = False).fit_transform(training_set.iloc[:, 1:10])
 
@@ -271,46 +271,47 @@ training_set_normalize = pd.DataFrame(training_set_normalize, columns = ['clump_
               'mitosis'])
 
 
-classesmalignant = [];
-print(classes_training)
-
-for i in range(classes_training.shape[0]):
-    if classes_training.iloc[i, 0] == 'malignant':
-        classesmalignant.append(1)
-    else:
-        classesmalignant.append(0)
-
-classesmalignant = pd.DataFrame(classes_training.as_matrix(), columns = ['classes_malignant'])
-#L2 = [classesmalignant, training_set_normalize.loc[:, training_set_normalize.columns != 'classes']]
 L3 = [classes_training, training_set_normalize.loc[:, training_set_normalize.columns != 'classes']]
 training_set_normalize = pd.concat(L3, axis = 1)
 training_set_normalize_clump = training_set_normalize.loc[:, training_set_normalize.columns !=  'clump_thickness']
 
-#print(type(training_set_normalize))
-#print(type(training_set_normalize_clump))
 
-import statsmodels.formula.api as smf
 formula  = 'clump_thickness ~ classes + uniformity_of_cell_size + uniformity_of_cell_shape + \
             marginal_adhesion + single_epithelial_cell_size + bare_nuclei + bland_chromatin + \
             normal_nucleoli + mitosis'
-dta = training_set_normalize
-#model_glm = sm.GLM(training_set_normalize.loc[:, training_set_normalize.columns ==  'clump_thickness'], training_set_normalize_clump)
-model_glm = smf.glm(formula = formula, data = dta).fit()
+random.seed(42)
+model_glm = smf.glm(formula = formula, data = training_set_normalize).fit()
 print(model_glm.summary())
-# previsões do modelo para  conjunto de teste
-ypred = model_glm.predict(testing_set)
-print(ypred)
 
-#Residuos
-#resid = model_glm.resid_response
-print(testing_set['clump_thickness'])
-resid = testing_set['clump_thickness'] - ypred
-print(resid)
 
-#model_results = model_glm.fit()
-#print(model_results)
+test_clump_norm = (testing_set['clump_thickness'] - training_set['clump_thickness'].mean())/(training_set['clump_thickness'].std(axis = 0))
+test_unif_cell_size_norm = (testing_set['uniformity_of_cell_size'] - training_set['uniformity_of_cell_size'].mean())/(training_set['uniformity_of_cell_size'].std(axis = 0))
+test_unif_cell_shape_norm = (testing_set['uniformity_of_cell_shape'] - training_set['uniformity_of_cell_shape'].mean())/(training_set['uniformity_of_cell_shape'].std(axis = 0))
+test_marg_adhesion_norm = (testing_set['marginal_adhesion'] - training_set['marginal_adhesion'].mean())/(training_set['marginal_adhesion'].std(axis = 0))
+test_sing_epithe_cell_size_norm = (testing_set['single_epithelial_cell_size'] - training_set['single_epithelial_cell_size'].mean())/(training_set['single_epithelial_cell_size'].std(axis = 0))
+test_bare_nuclei_norm = (testing_set['bare_nuclei'] - training_set['bare_nuclei'].mean())/(training_set['bare_nuclei'].std(axis = 0))
+test_bland_chrom_norm = (testing_set['bland_chromatin'] - training_set['bland_chromatin'].mean())/(training_set['bland_chromatin'].std(axis = 0))
+test_norm_nucl_norm = (testing_set['normal_nucleoli'] - training_set['normal_nucleoli'].mean())/(training_set['normal_nucleoli'].std(axis = 0))
+test_mit_norm = (testing_set['mitosis'] - training_set['mitosis'].mean())/(training_set['mitosis'].std(axis = 0))
 
-#from sklearn import linear_model
-#clf = linear_model.LinearRegression()
-#clf.fit(training_set_normalize_clump, training_set_normalize['clump_thickness'])
-#clf.coef_
+L_test = [testing_set['classes'], test_clump_norm, test_unif_cell_size_norm, test_unif_cell_shape_norm, test_marg_adhesion_norm,
+          test_sing_epithe_cell_size_norm, test_bare_nuclei_norm, test_bland_chrom_norm, test_norm_nucl_norm, test_mit_norm]
+test_set = pd.concat(L_test, axis = 1)
+
+ypred = model_glm.predict(test_set)
+
+resid = test_set['clump_thickness'] - ypred
+
+df_plot_y_res = pd.concat([test_set['clump_thickness'], resid], axis = 1)
+df_plot_y_res.columns = ['clump_thickness','Residuos']
+print(df_plot_y_res)
+
+plt.scatter(df_plot_y_res['clump_thickness'], df_plot_y_res['Residuos'], color = 'black')
+#plt.plot(df_plot_y_res['clump_thickness'], df_plot_y_res['Residuos'], color = 'blue', linewidth = 3)
+plt.title('Y vs Residuos')
+plt.xlabel('y')
+plt.ylabel('Residuos')
+plt.show()
+
+sns.lmplot(x = 'clump_thickness', y = 'Residuos', data = df_plot_y_res)
+plt.show()
