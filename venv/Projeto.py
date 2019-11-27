@@ -22,10 +22,10 @@ import h2o
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csvx-special/nautilus-clipboard
 
-#df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+                header = None)
+#df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
 #                 header = None)
-df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
-                 header = None)
 
 # Mostra as primeiras 5 linhas do ficheiro/data frame
 # print(df.head())
@@ -225,32 +225,27 @@ training_set, testing_set= train_test_split(df_final,test_size=0.7)
 # FALTAM OS GRÁFICOS!
 #--------------------------Graficos GGPLOT---------------------------
 #Useful functions 
-#def labels(from_, to_, step_):
-#   return pd.Series(np.arange(from_, to_ + step_, step_)).apply(lambda x: '{:,}'.format(x)).tolist()def breaks(from_, to_, step_):
-#    return pd.Series(np.arange(from_, to_ + step_, step_)).tolist()
 
-#Read data and set index
+df_final_dply = pd.melt(df_final, id_vars='classes')
+for i in range(len(df_final_dply['variable'].unique())):
+    df_use = df_final_tidy.iloc[(i*699):((i+1)*699),:]
+    for target in targets:
+        subset = df_use[df_use['classes']==target]
+        sns.distplot(subset['value'], hist=False, kde=True,  kde_kws = {'shade': True, 'linewidth': 1},
+                     label = target)
+    plt.legend(prop={'size': 16}, title = 'Type')
+    targets = ['benign', 'malignant']
+    colors = ['r', 'g']
+    plt.title(df_use['variable'].unique())
+    plt.show()
 
-#data = pd.read_csv(c_remote_data)data = (
- #   data.filter([
-  #      'abv',
-   #     'ibu',
-    #    'id',
-     #   'name',
-      #  'style',
-       # 'brewery_id',
-        ##'ounces'
- #   ]).
-  #  set_index('id')
-#)
-#
-#Histogram
-#Initial
+    #rbind(data.frame(group = "train", train_data),
+    #  data.frame(group = "test", test_data)) %>%
 
-#fig = (
- #   ggplot(data.dropna(subset = ['abv'])) +
-  #  geom_histogram(aes(x = 'abv'))
-#)
+#  gather(x, y, clump_thickness:mitosis) %>%
+ # ggplot(aes(x = y, color = group, fill = group)) +
+ #   geom_density(alpha = 0.3) +
+    #facet_wrap( ~ x, scales = "free", ncol = 3)
 
 #--------------------------------------------------------------------//
 
