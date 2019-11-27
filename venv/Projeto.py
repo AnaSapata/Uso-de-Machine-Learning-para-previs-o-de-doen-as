@@ -219,11 +219,9 @@ for i in range(len(df_final_tidy['variable'].unique())):
 
 #------------------Treinamento, validacao e teste dos dados-------------------------------------------- ?
 
-random.seed(42)
-
 training_set, testing_set= train_test_split(df_final,test_size=0.3, random_state = 42)
-print(testing_set.shape)
-print(training_set.shape)
+
+
 # FALTAM OS GRÁFICOS!
 #--------------------------Graficos GGPLOT---------------------------
 #Useful functions 
@@ -280,38 +278,26 @@ formula  = 'clump_thickness ~ classes + uniformity_of_cell_size + uniformity_of_
             marginal_adhesion + single_epithelial_cell_size + bare_nuclei + bland_chromatin + \
             normal_nucleoli + mitosis'
 random.seed(42)
-model_glm = smf.glm(formula = formula, data = training_set_normalize).fit()
+model_glm = smf.glm(formula = formula, data = training_set).fit()
 print(model_glm.summary())
 
+# Fitted Values = Predictions
+pred = model_glm.fittedvalues
+residuos = model_glm.resid_response
+y = training_set['clump_thickness']
 
-test_clump_norm = (testing_set['clump_thickness'] - training_set['clump_thickness'].mean())/(training_set['clump_thickness'].std(axis = 0))
-test_unif_cell_size_norm = (testing_set['uniformity_of_cell_size'] - training_set['uniformity_of_cell_size'].mean())/(training_set['uniformity_of_cell_size'].std(axis = 0))
-test_unif_cell_shape_norm = (testing_set['uniformity_of_cell_shape'] - training_set['uniformity_of_cell_shape'].mean())/(training_set['uniformity_of_cell_shape'].std(axis = 0))
-test_marg_adhesion_norm = (testing_set['marginal_adhesion'] - training_set['marginal_adhesion'].mean())/(training_set['marginal_adhesion'].std(axis = 0))
-test_sing_epithe_cell_size_norm = (testing_set['single_epithelial_cell_size'] - training_set['single_epithelial_cell_size'].mean())/(training_set['single_epithelial_cell_size'].std(axis = 0))
-test_bare_nuclei_norm = (testing_set['bare_nuclei'] - training_set['bare_nuclei'].mean())/(training_set['bare_nuclei'].std(axis = 0))
-test_bland_chrom_norm = (testing_set['bland_chromatin'] - training_set['bland_chromatin'].mean())/(training_set['bland_chromatin'].std(axis = 0))
-test_norm_nucl_norm = (testing_set['normal_nucleoli'] - training_set['normal_nucleoli'].mean())/(training_set['normal_nucleoli'].std(axis = 0))
-test_mit_norm = (testing_set['mitosis'] - training_set['mitosis'].mean())/(training_set['mitosis'].std(axis = 0))
-
-L_test = [testing_set['classes'], test_clump_norm, test_unif_cell_size_norm, test_unif_cell_shape_norm, test_marg_adhesion_norm,
-          test_sing_epithe_cell_size_norm, test_bare_nuclei_norm, test_bland_chrom_norm, test_norm_nucl_norm, test_mit_norm]
-test_set = pd.concat(L_test, axis = 1)
-
-ypred = model_glm.predict(test_set)
-
-resid = test_set['clump_thickness'] - ypred
-
-df_plot_y_res = pd.concat([test_set['clump_thickness'], resid], axis = 1)
-df_plot_y_res.columns = ['clump_thickness','Residuos']
-print(df_plot_y_res)
-
-plt.scatter(df_plot_y_res['clump_thickness'], df_plot_y_res['Residuos'], color = 'black')
-#plt.plot(df_plot_y_res['clump_thickness'], df_plot_y_res['Residuos'], color = 'blue', linewidth = 3)
-plt.title('Y vs Residuos')
-plt.xlabel('y')
-plt.ylabel('Residuos')
+df_plot1 = pd.concat([pred, residuos], axis = 1)
+df_plot1.columns = ['Previsões','Residuos']
+sns.lmplot(x = 'Previsões', y = 'Residuos', data = df_plot1)
 plt.show()
 
-sns.lmplot(x = 'clump_thickness', y = 'Residuos', data = df_plot_y_res)
+df_plot2 = pd.concat([y, residuos], axis = 1)
+df_plot2.columns = ['clump_thickness','Residuos']
+sns.lmplot(x = 'clump_thickness', y = 'Residuos', data = df_plot2)
 plt.show()
+
+df_plot3 = pd.concat([y, pred], axis = 1)
+df_plot3.columns = ['clump_thickness','Previsões']
+sns.lmplot(x = 'clump_thickness', y = 'Previsões', data = df_plot3)
+plt.show()
+
