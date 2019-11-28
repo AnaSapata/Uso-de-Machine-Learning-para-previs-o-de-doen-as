@@ -166,11 +166,10 @@ df_normalize = StandardScaler().fit_transform(df_without_classes_transpose)
 pca_9 = PCA(n_components = 9)
 # Aplicado PCA aos dados
 principalComponents_9 = pca_9.fit_transform(df_normalize)
-
 # Data Frame para observação do valor de cada variavel na respetiva componente
 principal_Df_2 = pd.DataFrame(data = pca_9.components_[:,[0,1]]
              , columns = ['principal component 1', 'principal component 2'])
-print(principal_Df_2)
+#print(principal_Df_2)
 
 
 principalComponents_Df = pd.DataFrame(data = pca_9.components_.transpose(),
@@ -184,6 +183,7 @@ principalComponents_Df = pd.DataFrame(data = pca_9.components_.transpose(),
               'PC8',
               'PC9'])
 principalComponents_Df['Group'] = df_final['classes']
+
 print(principalComponents_Df.head())
 # Percentagem de explicação de cada componente
 print('Explained variation per principal component: {}'.format(pca_9.explained_variance_ratio_))
@@ -267,7 +267,6 @@ training_set_normalize = pd.DataFrame(training_set_normalize, columns = ['clump_
               'bland_chromatin',
               'normal_nucleoli',
               'mitosis'])
-
 
 L3 = [classes_training, training_set_normalize.loc[:, training_set_normalize.columns != 'classes']]
 training_set_normalize = pd.concat(L3, axis = 1)
