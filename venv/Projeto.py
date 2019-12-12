@@ -234,7 +234,7 @@ for i in range(len(df_final_dply['variable'].unique())):
         sns.distplot(subset['value'], hist=False, kde=True,  kde_kws = {'shade': True, 'linewidth': 1},
                      label = target)
     plt.legend(prop={'size': 16}, title = 'Type')
-    targets = ['benign', 'malignant']
+    targets = ['train', 'test']
     colors = ['r', 'g']
     plt.title(df_use['variable'].unique())
     plt.show()
