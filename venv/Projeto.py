@@ -224,7 +224,6 @@ training_set, testing_set= train_test_split(df_final,test_size=0.3, random_state
 
 # FALTAM OS GRÁFICOS!
 #--------------------------Graficos GGPLOT---------------------------
-#Useful functions 
 
 df_final_dply = pd.melt(df_final, id_vars='classes')
 for i in range(len(df_final_dply['variable'].unique())):
@@ -234,18 +233,10 @@ for i in range(len(df_final_dply['variable'].unique())):
         sns.distplot(subset['value'], hist=False, kde=True,  kde_kws = {'shade': True, 'linewidth': 1},
                      label = target)
     plt.legend(prop={'size': 16}, title = 'Type')
-    targets = ['benign', 'malignant']
+    targets = ['train', 'test']
     colors = ['r', 'g']
     plt.title(df_use['variable'].unique())
     plt.show()
-
-    #rbind(data.frame(group = "train", train_data),
-    #  data.frame(group = "test", test_data)) %>%
-
-#  gather(x, y, clump_thickness:mitosis) %>%
- # ggplot(aes(x = y, color = group, fill = group)) +
- #   geom_density(alpha = 0.3) +
-    #facet_wrap( ~ x, scales = "free", ncol = 3)
 
 #--------------------------------------------------------------------//
 
