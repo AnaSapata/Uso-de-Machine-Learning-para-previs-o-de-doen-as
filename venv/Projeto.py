@@ -221,8 +221,6 @@ for i in range(len(df_final_tidy['variable'].unique())):
 
 training_set, testing_set= train_test_split(df_final,test_size=0.3, random_state = 42)
 
-
-# FALTAM OS GRÁFICOS!
 #--------------------------Graficos GGPLOT---------------------------
 
 df_final_dply = pd.melt(df_final, id_vars='classes')
