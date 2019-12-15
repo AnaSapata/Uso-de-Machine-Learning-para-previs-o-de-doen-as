@@ -4,7 +4,8 @@ import pandas as pd
 import numpy as np
 import random
 import matplotlib.pyplot as plt
-from sklearn.impute import SimpleImputer
+#from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import Imputer
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 from sklearn.neighbors import KNeighborsRegressor
@@ -223,7 +224,7 @@ training_set, testing_set= train_test_split(df_final,test_size=0.3, random_state
 
 #--------------------------Graficos GGPLOT---------------------------
 
-df_final_dply = pd.melt(df_final, id_vars='classes')
+df_final_dply = pd.melt(df_final, id_vars='train')#
 for i in range(len(df_final_dply['variable'].unique())):
     df_use = df_final_tidy.iloc[(i*699):((i+1)*699),:]
     for target in targets:
