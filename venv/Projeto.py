@@ -24,10 +24,10 @@ import statsmodels.formula.api as smf
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csvx-special/nautilus-clipboard
 
-df = pd.read_csv('/home/jsm/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+#df = pd.read_csv('/home/jsm/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+#               header = None)
+df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
                header = None)
-#df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
- #               header = None)
 #df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
 #                 header = None)
 
@@ -296,3 +296,25 @@ df_plot3.columns = ['clump_thickness','Previsões']
 sns.lmplot(x = 'clump_thickness', y = 'Previsões', data = df_plot3)
 plt.show()
 
+df_plot4()
+pylab.show()
+
+df_plot1()
+df_plot2()
+df_plot3()
+df_plot4()
+
+
+from sklearn import tree
+y = df_final.loc[:, df_final.columns ==  'classes']
+x = df_final.loc[:, df_final.columns !=  'classes']
+figsize=(14, 10)
+plt.figure()
+
+clf = tree.DecisionTreeClassifier().fit(x, y)
+tree.plot_tree(clf, filled=True)
+plt.show()
+
+def build_tree(data, labels, tree, depth = 1):
+    classes, counts = np.unique(labels, return_counts=True)
+    n_classes = classes.shape[0]
