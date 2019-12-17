@@ -4,8 +4,8 @@ import pandas as pd
 import numpy as np
 import random
 import matplotlib.pyplot as plt
-#from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import Imputer
+from sklearn.impute import SimpleImputer
+#from sklearn.preprocessing import Imputer
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 from sklearn.neighbors import KNeighborsRegressor
@@ -24,8 +24,10 @@ import statsmodels.formula.api as smf
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csvx-special/nautilus-clipboard
 
-df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
-                header = None)
+df = pd.read_csv('/home/jsm/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+               header = None)
+#df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+ #               header = None)
 #df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
 #                 header = None)
 
@@ -223,16 +225,25 @@ for i in range(len(df_final_tidy['variable'].unique())):
 training_set, testing_set= train_test_split(df_final,test_size=0.3, random_state = 42)
 
 #--------------------------Graficos GGPLOT---------------------------
+training_set['Group']='Training'
+df_final_train = pd.melt(training_set.loc[:,training_set.columns!='classes'], id_vars='Group')
 
-df_final_dply = pd.melt(df_final, id_vars='train')#
-for i in range(len(df_final_dply['variable'].unique())):
-    df_use = df_final_tidy.iloc[(i*699):((i+1)*699),:]
+testing_set['Group']='Testing'
+df_final_test = pd.melt(testing_set.loc[:,testing_set.columns!='classes'], id_vars='Group')
+
+df_juntar = pd.concat([df_final_train, df_final_test])
+df_juntar = df_juntar.sort_values(by=['variable'])
+
+targets = ['Training', 'Testing']
+
+for i in range(len(df_juntar['variable'].unique())):
+    df_use = df_juntar.iloc[(i*699):((i+1)*699),:]
+    print(df_use)
     for target in targets:
-        subset = df_use[df_use['classes']==target]
+        subset = df_use[df_use['Group']==target]
         sns.distplot(subset['value'], hist=False, kde=True,  kde_kws = {'shade': True, 'linewidth': 1},
                      label = target)
-    plt.legend(prop={'size': 16}, title = 'Type')
-    targets = ['train', 'test']
+    plt.legend(prop={'size': 16}, title = 'Type')    
     colors = ['r', 'g']
     plt.title(df_use['variable'].unique())
     plt.show()
