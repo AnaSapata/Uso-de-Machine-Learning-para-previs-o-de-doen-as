@@ -26,10 +26,12 @@ import statsmodels.formula.api as smf
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csvx-special/nautilus-clipboard
 
-#df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
-#                header = None)
-df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
-                 header = None)
+#df = pd.read_csv('/home/jsm/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+#               header = None)
+df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+               header = None)
+#df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+#                 header = None)
 
 # Mostra as primeiras 5 linhas do ficheiro/data frame
 # print(df.head())
@@ -228,23 +230,26 @@ for i in range(len(df_final_tidy['variable'].unique())):
 training_set, testing_set= train_test_split(df_final,test_size=0.3, random_state = 42)
 
 #--------------------------Graficos GGPLOT---------------------------
+training_set['Group']='Training'
+df_final_train = pd.melt(training_set.loc[:,training_set.columns!='classes'], id_vars='Group')
 
-training_set['Group'] = 'Training'
-df_final_train = pd.melt(training_set.loc[:, training_set.columns != 'classes'], id_vars = 'Group')
-testing_set['Group'] = 'Testing'
-df_final_test = pd.melt(testing_set.loc[:, testing_set.columns != 'classes'], id_vars = 'Group')
-df_final_sets = pd.concat([df_final_train, df_final_test])
+testing_set['Group']='Testing'
+df_final_test = pd.melt(testing_set.loc[:,testing_set.columns!='classes'], id_vars='Group')
 
+df_juntar = pd.concat([df_final_train, df_final_test])
+df_juntar = df_juntar.sort_values(by=['variable'])
 
-for i in range(len(df_final_sets['variable'].unique())):
-    df_use = df_final_sets[df_final_sets['variable'] == df_final_sets['variable'].unique()[i]]
-    targets = ['Training', 'Testing']
-    colors = ['r', 'g']
+targets = ['Training', 'Testing']
+
+for i in range(len(df_juntar['variable'].unique())):
+    df_use = df_juntar.iloc[(i*699):((i+1)*699),:]
+    print(df_use)
     for target in targets:
-        subset = df_use[df_use['Group'] == target]
+        subset = df_use[df_use['Group']==target]
         sns.distplot(subset['value'], hist=False, kde=True,  kde_kws = {'shade': True, 'linewidth': 1},
                      label = target)
-    plt.legend(prop={'size': 16}, title = 'Type')
+    plt.legend(prop={'size': 16}, title = 'Type')    
+    colors = ['r', 'g']
     plt.title(df_use['variable'].unique())
     plt.show()
 
@@ -314,14 +319,25 @@ df_plot3.columns = ['clump_thickness','Previsões']
 sns.lmplot(x = 'clump_thickness', y = 'Previsões', data = df_plot3)
 plt.show()
 
+df_plot4()
+pylab.show()
+
+df_plot1()
+df_plot2()
+df_plot3()
+df_plot4()
+
+
 from sklearn import tree
 y = df_final.loc[:, df_final.columns ==  'classes']
 x = df_final.loc[:, df_final.columns !=  'classes']
-
+figsize=(14, 10)
 plt.figure()
+
 clf = tree.DecisionTreeClassifier().fit(x, y)
 tree.plot_tree(clf, filled=True)
 plt.show()
+
 
 from sklearn.ensemble import RandomForestRegressor
 
@@ -334,3 +350,7 @@ y_training = training_set_normalize.loc[:, training_set_normalize.columns ==  'c
 x_testing = testing_set_normalize.loc[:, testing_set_normalize.columns != 'classes']
 regressor.fit(x_training, y_training)
 y_pred = regressor.predict(x_testing)
+
+def build_tree(data, labels, tree, depth = 1):
+    classes, counts = np.unique(labels, return_counts=True)
+    n_classes = classes.shape[0]
