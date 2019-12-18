@@ -4,8 +4,8 @@ import pandas as pd
 import numpy as np
 import random
 import matplotlib.pyplot as plt
-#from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import Imputer
+from sklearn.impute import SimpleImputer
+#from sklearn.preprocessing import Imputer
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 from sklearn.neighbors import KNeighborsRegressor
@@ -21,13 +21,15 @@ import seaborn as sns
 import statsmodels.formula.api as smf
 
 
+
+
 # Leitura do ficheiro dos dados, especificando que o mesmo não tem nome para as colunas (header = None)
 # Comando read_csv da biblioteca Pandas é o equivalente ao read.table do R, uma vez que temos o ficheiro em formato csvx-special/nautilus-clipboard
 
-df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
-                header = None)
-#df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
-#                 header = None)
+#df = pd.read_csv('/home/raquel/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+#                header = None)
+df = pd.read_csv('/home/anasapata/Personal/ProjetoIntegrado/Uso-de-Machine-Learning-para-previs-o-de-doen-as/breast-cancer-wisconsin.data.csv',
+                 header = None)
 
 # Mostra as primeiras 5 linhas do ficheiro/data frame
 # print(df.head())
@@ -208,6 +210,9 @@ plt.show()
 
 
 df_final_tidy = pd.melt(df_final, id_vars='classes')
+print("DADOS")
+print(df_final_tidy)
+
 for i in range(len(df_final_tidy['variable'].unique())):
     df_use = df_final_tidy.iloc[(i*699):((i+1)*699),:]
     for target in targets:
@@ -224,16 +229,22 @@ training_set, testing_set= train_test_split(df_final,test_size=0.3, random_state
 
 #--------------------------Graficos GGPLOT---------------------------
 
-df_final_dply = pd.melt(df_final, id_vars='train')#
-for i in range(len(df_final_dply['variable'].unique())):
-    df_use = df_final_tidy.iloc[(i*699):((i+1)*699),:]
+training_set['Group'] = 'Training'
+df_final_train = pd.melt(training_set.loc[:, training_set.columns != 'classes'], id_vars = 'Group')
+testing_set['Group'] = 'Testing'
+df_final_test = pd.melt(testing_set.loc[:, testing_set.columns != 'classes'], id_vars = 'Group')
+df_final_sets = pd.concat([df_final_train, df_final_test])
+
+
+for i in range(len(df_final_sets['variable'].unique())):
+    df_use = df_final_sets[df_final_sets['variable'] == df_final_sets['variable'].unique()[i]]
+    targets = ['Training', 'Testing']
+    colors = ['r', 'g']
     for target in targets:
-        subset = df_use[df_use['classes']==target]
+        subset = df_use[df_use['Group'] == target]
         sns.distplot(subset['value'], hist=False, kde=True,  kde_kws = {'shade': True, 'linewidth': 1},
                      label = target)
     plt.legend(prop={'size': 16}, title = 'Type')
-    targets = ['train', 'test']
-    colors = ['r', 'g']
     plt.title(df_use['variable'].unique())
     plt.show()
 
@@ -256,6 +267,24 @@ training_set_normalize = pd.DataFrame(training_set_normalize, columns = ['clump_
 L3 = [classes_training, training_set_normalize.loc[:, training_set_normalize.columns != 'classes']]
 training_set_normalize = pd.concat(L3, axis = 1)
 training_set_normalize_clump = training_set_normalize.loc[:, training_set_normalize.columns !=  'clump_thickness']
+
+
+classes_testing = pd.DataFrame(testing_set.as_matrix(columns = ['classes']), columns = ['classes'])
+testing_set_normalize = StandardScaler(copy = False).fit_transform(testing_set.iloc[:, 1:10])
+
+testing_set_normalize = pd.DataFrame(testing_set_normalize, columns = ['clump_thickness',
+              'uniformity_of_cell_size',
+              'uniformity_of_cell_shape',
+              'marginal_adhesion',
+              'single_epithelial_cell_size',
+              'bare_nuclei',
+              'bland_chromatin',
+              'normal_nucleoli',
+              'mitosis'])
+
+L4 = [classes_testing, testing_set_normalize.loc[:, testing_set_normalize.columns != 'classes']]
+testing_set_normalize = pd.concat(L4, axis = 1)
+
 
 
 formula  = 'clump_thickness ~ classes + uniformity_of_cell_size + uniformity_of_cell_shape + \
@@ -285,3 +314,23 @@ df_plot3.columns = ['clump_thickness','Previsões']
 sns.lmplot(x = 'clump_thickness', y = 'Previsões', data = df_plot3)
 plt.show()
 
+from sklearn import tree
+y = df_final.loc[:, df_final.columns ==  'classes']
+x = df_final.loc[:, df_final.columns !=  'classes']
+
+plt.figure()
+clf = tree.DecisionTreeClassifier().fit(x, y)
+tree.plot_tree(clf, filled=True)
+plt.show()
+
+from sklearn.ensemble import RandomForestRegressor
+
+regressor = RandomForestRegressor(n_estimators=20, random_state=0)
+# Variaveis independentes do conjunto de treino
+x_training = training_set_normalize.loc[:, training_set_normalize.columns !=  'classes']
+# Variavel dependente do conjunto de treino
+y_training = training_set_normalize.loc[:, training_set_normalize.columns ==  'classes']
+# Variaveis independentes do conjunto de teste
+x_testing = testing_set_normalize.loc[:, testing_set_normalize.columns != 'classes']
+regressor.fit(x_training, y_training)
+y_pred = regressor.predict(x_testing)
