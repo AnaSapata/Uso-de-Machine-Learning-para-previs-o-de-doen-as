@@ -5,12 +5,15 @@
 
 # Ignoring folder venv/bin
 venv/bin/
-venv/_pycache_/
+__pycache__/
 venv/xgboost/
 
 # Ignoring folder venv/lib and venv/lib64
 venv/lib/
 venv/lib64/
+
+# Ignore notebook checkpoints
+.ipynb_checkpoints
 
 #Ignoring file pyvenv.cfg
 pyvenv.cfg
